@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Eye shape/sclera -->
+  <path 
+    d="M4 16C4 16 10 7 16 7C22 7 28 16 28 16C28 16 22 25 16 25C10 25 4 16 4 16Z"
+    fill="#F8FAFC"
+  />
+  
+  <!-- Iris base with pulse -->
+  <circle cx="16" cy="16" r="6" fill="#3B82F6">
+    <animate
+      attributeName="r"
+      values="6;4.5;6"
+      dur="1.5s"
+      repeatCount="indefinite"
+      keyTimes="0;0.5;1"
+      keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"
+      calcMode="spline"
+    />
+  </circle>
+  
+  <!-- Pupil with inverse pulse -->
+  <circle cx="16" cy="16" r="2.5" fill="#000000">
+    <animate
+      attributeName="r"
+      values="2.5;3.5;2.5"
+      dur="1.5s"
+      repeatCount="indefinite"
+      keyTimes="0;0.5;1"
+      keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"
+      calcMode="spline"
+    />
+  </circle>
+  
+  <!-- Light reflection -->
+  <circle cx="14" cy="14" r="1.5" fill="#FFFFFF" opacity="0.8"/>
+  
+  <!-- Glow effect -->
+  <circle cx="16" cy="16" r="7" stroke="#3B82F6" stroke-width="0.5" fill="none" opacity="0.5">
+    <animate
+      attributeName="opacity"
+      values="0.5;0;0.5"
+      dur="1.5s"
+      repeatCount="indefinite"
+      keyTimes="0;0.5;1"
+      keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"
+      calcMode="spline"
+    />
+    <animate
+      attributeName="r"
+      values="7;8;7"
+      dur="1.5s"
+      repeatCount="indefinite"
+      keyTimes="0;0.5;1"
+      keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"
+      calcMode="spline"
+    />
+  </circle>
+</svg>
