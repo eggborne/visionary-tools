@@ -1,7 +1,13 @@
 
 <?php
-	include("config.php");
-	$inventorySql = "SELECT * FROM `inventory`";
+	include("../config.php");
+	$postData = json_decode(file_get_contents("php://input"), TRUE);
+	if (!$postData) {
+		echo 'no post data';
+		mysqli_close($link);
+	}
+	$tableName = $postData['inventoryName']
+	$inventorySql = "SELECT * FROM `$tableName`";
 	$inventoryResult = mysqli_query($link, $inventorySql);
 	if ($inventoryResult) {
 		$inventoryArray = array();

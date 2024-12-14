@@ -1,5 +1,5 @@
 <?php
-	include("config.php");
+	include("../config.php");
 	$postData = json_decode(file_get_contents("php://input"), TRUE);
 	if (!$postData) {
 		echo 'no post data';
@@ -12,7 +12,7 @@
 	$depth = floatval($postData['depth']);
 	$packaging = mysqli_real_escape_string($link, $postData['packaging'] ?? '');
 	$notes = mysqli_real_escape_string($link, $postData['notes'] ?? '');
-	$addItemSql = "INSERT INTO `inventory` 
+	$addItemSql = "INSERT INTO `loren-inventory` 
     (`location`, `origin`, `height`, `width`, `depth`, `packaging`, `notes`) 
     VALUES 
     ('$location', '$origin', $height, $width, $depth, '$packaging', '$notes')";

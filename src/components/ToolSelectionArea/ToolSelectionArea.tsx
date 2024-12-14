@@ -36,6 +36,7 @@ export default function ToolSelectionArea() {
       if (user) {
         try {
           const token = await user.getIdToken();
+          console.log('auth token:', authToken)
           setAuthToken(token);
         } catch (error) {
           console.error('Error getting auth token:', error);

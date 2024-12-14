@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { User } from '../types';
-import { addNewUser, updateUserAuthorizations } from '../db/fetch';
+import { addNewUser } from '../db/fetch';
 
 // We'll extend our existing AuthContextType to include sign-out functionality
 interface AuthContextValue {
