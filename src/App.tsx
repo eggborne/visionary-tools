@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
 import styles from './App.module.css';
+import GoogleSignIn from './components/GoogleSignIn';
+import { useAuth } from './context/AuthContext';
+import UserInfo from './components/UserInfo/UserInfo';
+import ToolSelectionArea from './components/ToolSelectionArea/ToolSelectionArea';
 
 interface AnimatedLetterProps {
   char: string;
@@ -29,6 +33,7 @@ function AnimatedLetter({ char, index, isVisible }: AnimatedLetterProps) {
 export default function App() {
   const [isVisible, setIsVisible] = useState(false);
   const titleChars = "visionary.tools".split('');
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -42,36 +47,65 @@ export default function App() {
     transitionDelay: `${titleChars.length * 30}ms`
   };
 
-  return (
-    <>
+  if (user) {
+    console.log('user is', user)
+  }
+
+  // Show loading state while authentication state is being determined
+  if (loading) {
+    return (
       <div className={styles.container}>
         <div className={styles.backgroundContainer}>
           <div className={styles.gradientBlur1} />
           <div className={styles.gradientBlur2} />
         </div>
         <div className={styles.content}>
-          <h1 className={styles.title}>
-            {titleChars.map((char, i) => (
-              <AnimatedLetter
-                key={i}
-                char={char}
-                index={i}
-                isVisible={isVisible}
-              />
-            ))}
-          </h1>
-          <img className={styles.logo} src='favicon.svg' />
-          <div
-            className={`${styles.buttonContainer} ${isVisible ? styles.visible : ''}`}
-            style={buttonStyle}
-          >
-            <a href="/inventory" className={styles.button}>
-              Inventory
-            </a>
+          <div className={styles.loadingContainer}>
+            <div className={styles.loadingDot} />
+            <div className={styles.loadingDot} />
+            <div className={styles.loadingDot} />
           </div>
         </div>
       </div>
-      <footer>by mike@mikedonovan.dev</footer>
-    </>
+    );
+  }
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.backgroundContainer}>
+        <div className={styles.gradientBlur1} />
+        <div className={styles.gradientBlur2} />
+      </div>
+      <header>
+        <h1 className={styles.title}>
+          {titleChars.map((char, i) => (
+            <AnimatedLetter key={i} char={char} index={i} isVisible={isVisible} />
+          ))}
+        </h1>
+      </header>
+      <div className={styles.logoContainer}>
+        <div className={styles.legend}>
+        </div>
+        <img className={styles.logo} src='favicon.svg' />
+        <div className={styles.legend}>
+        </div>
+      </div>
+      <main className={styles.content}>
+        <div
+          className={`${styles.buttonContainer} ${isVisible ? styles.visible : ''}`}
+          style={buttonStyle}
+        >
+          {user ? (
+            <>
+              <UserInfo />
+              <ToolSelectionArea />
+            </>
+          ) : (
+            <GoogleSignIn />
+          )}
+        </div>
+      </main>
+      <footer>made with ❤️ by &nbsp;<a href='mailto:mike@mikedonovan.dev'>mike@mikedonovan.dev</a></footer>
+    </div>
   );
 }

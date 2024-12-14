@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, sendSignInLinkToEmail, signInWithPopup } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAYF9GaBpvV3B1UGFuLN4zdbz-Olhvu00A",
@@ -24,7 +24,7 @@ const actionCodeSettings = {
     installApp: true,
     minimumVersion: '12'
   },
-  dynamicLinkDomain: 'example.page.link'
+  dynamicLinkDomain: 'https://visionary.tools/'
 };
 
 const auth = getAuth();
@@ -43,4 +43,18 @@ const sendFirebaseEmail = (email: string) => {
     });
 };
 
-export { app, sendFirebaseEmail };
+const googleProvider = new GoogleAuthProvider();
+
+const signInWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+    console.log('Successfully signed in with Google:', user);
+    return user;
+  } catch (error) {
+    console.error('Error signing in with Google:', error);
+    throw error;
+  }
+};
+
+export { app, sendFirebaseEmail, signInWithGoogle };
