@@ -17,6 +17,11 @@
   overflow: hidden;
   text-decoration: none;
   color: white;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr 1fr;
+  place-items: center;
+
 }
 
 .toolCard:hover {
@@ -59,10 +64,21 @@
   font-weight: 500;
   margin-bottom: 0.5rem;
   color: rgb(96, 165, 250);
+  grid-column-start: 2;
 }
 
 .toolDescription {
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
   line-height: 1.5;
+  grid-column-end: span 2;
+}
+
+.databaseList {
+  grid-column-end: span 2;
+  & > li {
+    padding: 1rem;
+    background-color: #00ff0022;
+    border-radius: 0.5rem;
+  }
 }

@@ -32,6 +32,16 @@ function formatUser(firebaseUser: FirebaseUser): User {
   };
 }
 
+const getToken = async (firebaseUser: FirebaseUser) => {
+  try {
+    const token = await firebaseUser.getIdToken();
+    return token;
+  } catch (error) {
+    console.error('Error getting auth token:', error);
+    return null;
+  }
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -39,11 +49,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Set up Firebase auth state observer
-    const establishUser = async (formattedUser: User) => {
+    const establishUser = async (firebaseUser: FirebaseUser) => {
+      const formattedUser = formatUser(firebaseUser);
+      const token = await getToken(firebaseUser);
+      formattedUser.accessToken = token;
       const userData = await addNewUser(formattedUser);
       if (userData) {
         console.log('user data?', userData)
-        console.log('authoriz?', userData.user.authorizations)
         setUser(userData.user);
       }
     };
@@ -51,8 +63,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (firebaseUser) {
         // User is signed in
         console.log('found signed-in user!', firebaseUser)
-        const formattedUser = formatUser(firebaseUser);
-        establishUser(formattedUser);
+        establishUser(firebaseUser);
       } else {
         // User is signed out
         setUser(null);

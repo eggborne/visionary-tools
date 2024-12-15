@@ -1,17 +1,8 @@
 import { useState, useEffect } from 'react';
-import { getAuth } from 'firebase/auth';
 import styles from './ToolSelectionArea.module.css';
+import { useAuth } from '../../context/AuthContext';
+import { Tool } from '../../types';
 
-// Define the structure for our tool data
-interface Tool {
-  id: string;
-  title: string;
-  description: string;
-  baseUrl: string;
-  icon: string;
-}
-
-// Our available tools with their separate domain URLs
 const tools: Tool[] = [
   {
     id: 'inventory',
@@ -25,27 +16,8 @@ const tools: Tool[] = [
 ];
 
 export default function ToolSelectionArea() {
+  const { user } = useAuth();
   const [visibleTools, setVisibleTools] = useState<string[]>([]);
-  const [authToken, setAuthToken] = useState<string | null>(null);
-  const auth = getAuth();
-
-  useEffect(() => {
-    // Get the current user's ID token when the component mounts
-    const getAuthToken = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        try {
-          const token = await user.getIdToken();
-          console.log('auth token:', authToken)
-          setAuthToken(token);
-        } catch (error) {
-          console.error('Error getting auth token:', error);
-        }
-      }
-    };
-
-    getAuthToken();
-  }, [auth]);
 
   useEffect(() => {
     // Animate tools appearing one by one
@@ -62,12 +34,11 @@ export default function ToolSelectionArea() {
   const handleToolClick = async (tool: Tool) => {
     // Refresh the token before redirecting
     try {
-      const user = auth.currentUser;
       if (user) {
-        const freshToken = await user.getIdToken(true);
+        // const freshToken = await user.getIdToken(true);
         // Construct the URL with the auth token
         const url = new URL(tool.baseUrl);
-        url.searchParams.set('token', freshToken);
+        // url.searchParams.set('token', freshToken);
         window.location.href = url.toString();
       }
     } catch (error) {
@@ -90,7 +61,7 @@ export default function ToolSelectionArea() {
             opacity: visibleTools.includes(tool.id) ? 1 : 0,
             transform: visibleTools.includes(tool.id)
               ? 'translateY(0)'
-              : 'translateY(20px)',
+              : 'translateY(1.5rem)',
           }}
         >
           <div
@@ -99,6 +70,11 @@ export default function ToolSelectionArea() {
           />
           <h3 className={styles.toolTitle}>{tool.title}</h3>
           <p className={styles.toolDescription}>{tool.description}</p>
+          {/* <ul className={styles.databaseList}>
+            {Object.values(user?.authorizations.inventory.databases).map((dbData: any) => {
+              return <li key={dbData.databaseMetadata.databaseName}>{dbData.databaseMetadata.displayName}</li>;
+            })}
+          </ul> */}
         </a>
       ))}
     </div>

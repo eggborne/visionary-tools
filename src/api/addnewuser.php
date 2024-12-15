@@ -15,6 +15,7 @@
     $displayName = $postData['displayName'] ?? '';
     $email = $postData['email'] ?? null;
     $photoURL = $postData['photoURL'] ?? '';
+    $accessToken = $postData['accessToken'] ?? '';
 
     if (!$uid || !$email) {
         http_response_code(400); // Bad request
@@ -26,13 +27,19 @@
         // Use PDO for database interaction
         $dsn = "mysql:host=" . $host . ";dbname=" . $db_name . ";charset=utf8mb4";
         $pdo = new PDO($dsn, $un, $pw, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Throw exceptions on errors
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // Fetch results as associative arrays
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ]);
 
-        // Insert user if they don't already exist
-        $sql = "INSERT IGNORE INTO users (uid, displayName, email, photoURL)
-                VALUES (:uid, :displayName, :email, :photoURL)";
+        // Use INSERT ... ON DUPLICATE KEY UPDATE to handle both new and existing users
+        $sql = "INSERT INTO users (uid, displayName, email, photoURL, accessToken) 
+                VALUES (:uid, :displayName, :email, :photoURL, :accessToken)
+                ON DUPLICATE KEY UPDATE 
+                    displayName = VALUES(displayName),
+                    email = VALUES(email),
+                    photoURL = VALUES(photoURL),
+                    accessToken = VALUES(accessToken),
+                    updated_at = CURRENT_TIMESTAMP";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
@@ -40,9 +47,10 @@
             ':displayName' => $displayName,
             ':email' => $email,
             ':photoURL' => $photoURL,
+            ':accessToken' => $accessToken,
         ]);
 
-        // Fetch the user from the database
+        // Fetch the updated user record
         $fetchSql = "SELECT * FROM users WHERE uid = :uid";
         $fetchStmt = $pdo->prepare($fetchSql);
         $fetchStmt->execute([':uid' => $uid]);
@@ -53,17 +61,14 @@
             echo json_encode([
                 'success' => true,
                 'user' => $user,
-                'message' => $stmt->rowCount() > 0 
-                    ? 'User added successfully!' 
-                    : 'User already exists; retrieved existing data.'
+                'message' => 'User data updated successfully!'
             ]);
         } else {
-            http_response_code(404); // Not Found
-            echo json_encode(['error' => 'User not found after insertion']);
+            http_response_code(404);
+            echo json_encode(['error' => 'User not found after update']);
         }
     } catch (PDOException $e) {
-        // Handle database errors
-        http_response_code(500); // Internal server error
+        http_response_code(500);
         echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
     }
 ?>

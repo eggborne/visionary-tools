@@ -4,11 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 function UserInfo() {
   const { user, loading, signOut } = useAuth();
   const { displayName, photoURL, authorizations } = user || {};
-
-  console.log('auth user is?', authorizations)
-
-  console.log('got user', photoURL)
-
+  
   if (loading) {
     return <div>Loading...</div>;
   }
