@@ -5,13 +5,6 @@ export type User = {
   displayName: string | null;
   authorizations?: any;
   accessToken?: string | null;
-  refreshToken?: string | null;
-};
-
-export type UserData = {
-  message: string;
-  success: boolean;
-  user: User;
 };
 
 export type AuthContextType = {

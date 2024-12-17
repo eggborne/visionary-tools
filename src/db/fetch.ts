@@ -1,57 +1,30 @@
-import { User, UserData } from "../types";
+import { User } from "../types";
 
 type AuthorizationUpdate = {
   uid: string;
   authorizations: Record<string, any>;
 };
 
-async function addNewUser(user: User): Promise<UserData | undefined> {
+const getUserData = async (user: User): Promise<User | undefined> => {
   try {
-    // Get a fresh token before sending the request
-    // const currentUser = getAuth().currentUser;
-    // const accessToken = currentUser ? await currentUser.getIdToken(true) : '';
-
-    const response = await fetch('https://visionary.tools/api/addnewuser.php', {
+    const response = await fetch(`https://visionary.tools/api/users/validate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(user),
+      body: JSON.stringify(user)
     });
-
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     const result = await response.json();
-    if (result.user.authorizations) {
-      result.user.authorizations = JSON.parse(result.user.authorizations);
-    }
     return result;
   } catch (error) {
-    console.error('Error adding user:', error);
-  }
-}
-
-async function updateUserAuthorizations(data: AuthorizationUpdate): Promise<void> {
-  try {
-    const response = await fetch('https://visionary.tools/api/updateauthorizations.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const result = await response.text();
-    console.log('updateUserAuthorizations response:', result);
-  } catch (error) {
-    console.error('Error updating authorizations:', error);
+    console.error('Error getting user data:', error);
+    return undefined;
   }
 }
 
 
-export { addNewUser, updateUserAuthorizations };
+export { getUserData };

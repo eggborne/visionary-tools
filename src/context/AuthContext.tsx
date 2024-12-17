@@ -2,10 +2,11 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { User } from '../types';
-import { addNewUser } from '../db/fetch';
+import { getUserData } from '../db/fetch';
 
 // We'll extend our existing AuthContextType to include sign-out functionality
 interface AuthContextValue {
+  foundUser: boolean;
   user: User | null;
   loading: boolean;
   signOut: () => Promise<void>;
@@ -43,8 +44,9 @@ const getToken = async (firebaseUser: FirebaseUser) => {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [foundUser, setFoundUser] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const auth = getAuth();
 
   useEffect(() => {
@@ -53,19 +55,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const formattedUser = formatUser(firebaseUser);
       const token = await getToken(firebaseUser);
       formattedUser.accessToken = token;
-      const userData = await addNewUser(formattedUser);
+      const userData = await getUserData(formattedUser);
       if (userData) {
-        console.log('user data?', userData)
-        setUser(userData.user);
+        setUser(userData);
       }
     };
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
         // User is signed in
-        console.log('found signed-in user!', firebaseUser)
+        setFoundUser(true);
+        console.log('found signed-in user!', firebaseUser);
         establishUser(firebaseUser);
       } else {
         // User is signed out
+        setFoundUser(false);
         setUser(null);
       }
       // Initial loading is complete
@@ -87,7 +90,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signOut }}>
+    <AuthContext.Provider value={{ foundUser, user, loading, signOut }}>
       {children}
     </AuthContext.Provider>
   );

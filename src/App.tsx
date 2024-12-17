@@ -33,7 +33,7 @@ function AnimatedLetter({ char, index, isVisible }: AnimatedLetterProps) {
 export default function App() {
   const [isVisible, setIsVisible] = useState(false);
   const titleChars = "visionary.tools".split('');
-  const { user, loading } = useAuth();
+  const { foundUser, user, loading } = useAuth();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -100,12 +100,19 @@ export default function App() {
               <UserInfo />
               <ToolSelectionArea />
             </>
-          ) : (
+          ) : foundUser ? (
+              <div className={styles.loadingContainer}>
+                <div className={styles.loadingDot} />
+                <div className={styles.loadingDot} />
+                <div className={styles.loadingDot} />
+              </div>
+          )
+            : (
             <GoogleSignIn />
           )}
         </div>
       </main>
-      <footer>made with ❤️ by &nbsp;<a href='mailto:mike@mikedonovan.dev'>mike@mikedonovan.dev</a></footer>
+      <footer>made with ❤️ by &nbsp;<a href='mailto:mike@mikedonovan.dev'>mikedonovan.dev</a></footer>
     </div>
   );
 }
