@@ -1,10 +1,5 @@
 import { User } from "../types";
 
-type AuthorizationUpdate = {
-  uid: string;
-  authorizations: Record<string, any>;
-};
-
 const getUserData = async (user: User): Promise<User | undefined> => {
   try {
     const response = await fetch(`https://visionary.tools/api/users/validate`, {
