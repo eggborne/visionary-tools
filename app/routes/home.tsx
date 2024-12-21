@@ -1,9 +1,18 @@
+import type { Route } from "./+types/home";
 import { useEffect, useState } from 'react';
-import styles from './App.module.css';
-import GoogleSignIn from './components/GoogleSignIn';
-import { useAuth } from './context/AuthContext';
-import UserInfo from './components/UserInfo/UserInfo';
-import ToolSelectionArea from './components/ToolSelectionArea/ToolSelectionArea';
+import styles from './home.module.css';
+import GoogleSignIn from '../components/GoogleSignIn';
+import { useAuth } from '../context/AuthContext';
+import UserInfo from '../components/UserInfo/UserInfo';
+import ToolSelectionArea from '../components/ToolSelectionArea/ToolSelectionArea';
+
+export function meta({}: Route.MetaArgs) {
+  return [
+    {
+      title: "visionary.tools",
+    },
+  ];
+}
 
 interface AnimatedLetterProps {
   char: string;
@@ -101,15 +110,15 @@ export default function App() {
               <ToolSelectionArea />
             </>
           ) : foundUser ? (
-              <div className={styles.loadingContainer}>
-                <div className={styles.loadingDot} />
-                <div className={styles.loadingDot} />
-                <div className={styles.loadingDot} />
-              </div>
+            <div className={styles.loadingContainer}>
+              <div className={styles.loadingDot} />
+              <div className={styles.loadingDot} />
+              <div className={styles.loadingDot} />
+            </div>
           )
             : (
-            <GoogleSignIn />
-          )}
+              <GoogleSignIn />
+            )}
         </div>
       </main>
       <footer>made with ❤️ by &nbsp;<a href='mailto:mike@mikedonovan.dev'>mikedonovan.dev</a></footer>

@@ -27,7 +27,7 @@ const actionCodeSettings = {
   dynamicLinkDomain: 'https://visionary.tools/'
 };
 
-const auth = getAuth();
+const auth = getAuth(app);
 
 const sendFirebaseEmail = (email: string) => {
   sendSignInLinkToEmail(auth, email, actionCodeSettings)
@@ -57,4 +57,4 @@ const signInWithGoogle = async () => {
   }
 };
 
-export { app, sendFirebaseEmail, signInWithGoogle };
+export { auth, app, sendFirebaseEmail, signInWithGoogle };

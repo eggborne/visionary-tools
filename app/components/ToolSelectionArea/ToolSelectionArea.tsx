@@ -1,14 +1,25 @@
 import { useState, useEffect } from 'react';
 import styles from './ToolSelectionArea.module.css';
 import { useAuth } from '../../context/AuthContext';
-import { Tool } from '../../types';
+import type { Tool } from '../../vistypes';
+import { useNavigate } from 'react-router';
+
 
 const tools: Tool[] = [
   {
     id: 'inventory',
     title: 'Inventory Manager',
     description: 'Track and manage your inventory.',
-    baseUrl: 'https://visionary.tools/inventory/',
+    baseUrl: '/inventory/',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+    </svg>`,
+  },
+  {
+    id: 'formulacreator',
+    title: 'Formula Creator',
+    description: 'Create and manage formulas.',
+    baseUrl: '/formulacreator/',
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
     </svg>`,
@@ -18,6 +29,12 @@ const tools: Tool[] = [
 export default function ToolSelectionArea() {
   const { user } = useAuth();
   const [visibleTools, setVisibleTools] = useState<string[]>([]);
+
+  const navigate = useNavigate();
+
+  const handleNavigation = (newRoute: string) => {
+    navigate(newRoute);
+  };
 
   useEffect(() => {
     // Animate tools appearing one by one
@@ -48,14 +65,11 @@ export default function ToolSelectionArea() {
 
   return (
     <div className={styles.toolGrid}>
-      {tools.map(tool => (
-        <a
+      {tools.map((tool, t) => (
+        <button
           key={tool.id}
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            handleToolClick(tool);
-          }}
+          // href={tool.baseUrl}
+          onClick={() => handleNavigation(tool.baseUrl)}
           className={styles.toolCard}
           style={{
             opacity: visibleTools.includes(tool.id) ? 1 : 0,
@@ -68,14 +82,9 @@ export default function ToolSelectionArea() {
             className={styles.toolIcon}
             dangerouslySetInnerHTML={{ __html: tool.icon }}
           />
-          <h3 className={styles.toolTitle}>{tool.title}</h3>
-          <p className={styles.toolDescription}>{tool.description}</p>
-          {/* <ul className={styles.databaseList}>
-            {Object.values(user?.authorizations.inventory.databases).map((dbData: any) => {
-              return <li key={dbData.databaseMetadata.databaseName}>{dbData.databaseMetadata.displayName}</li>;
-            })}
-          </ul> */}
-        </a>
+          {<h3 className={styles.toolTitle}>{tool.title}</h3>}
+          {/* <p className={styles.toolDescription}>{tool.description}</p> */}
+        </button>
       ))}
     </div>
   );

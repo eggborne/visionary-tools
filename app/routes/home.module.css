@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Codec+Pro:wght@300;500&display=swap');
-
 .container {
   min-height: 100dvh;
   background-color: #111;
@@ -13,6 +11,12 @@
     'footer';
   position: relative;
   overflow: hidden;
+
+  --header-height: 4.5rem;
+  --footer-height: 2rem;
+  --logo-width: clamp(120px, 40vw, 200px);
+  --logo-height: calc(var(--logo-width) / (24/18));
+  --title-font-size: 2rem;
 }
 
 header {

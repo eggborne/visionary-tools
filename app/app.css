@@ -12,13 +12,6 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  --header-height: 4.5rem;
-  --footer-height: 2rem;
-  --logo-width: clamp(120px, 40vw, 200px);
-  --logo-height: calc(var(--logo-width) / (24/18));
-
-  --title-font-size: 1.75rem;
 }
 
 * {
@@ -28,25 +21,26 @@
   overscroll-behavior: none;
 }
 
-ul {
-  list-style: none;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  min-height: 100dvh;
+#root {
+  max-width: 1280px;
+  text-align: center;
 }
 
 a {
   font-weight: 500;
   color: #646cff;
-  text-decoration: none;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  min-width: 320px;
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 3.2em;
   line-height: 1.1;
 }

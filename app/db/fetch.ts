@@ -1,4 +1,4 @@
-import { User } from "../types";
+import type { User } from "../vistypes";
 
 const getUserData = async (user: User): Promise<User | undefined> => {
   try {

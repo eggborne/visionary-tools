@@ -1,8 +1,9 @@
-// AuthContext.tsx
 import { createContext, useContext, useEffect, useState } from 'react';
-import { getAuth, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
-import { User } from '../types';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import type { User as FirebaseUser } from 'firebase/auth';
+import type { User } from '../vistypes';
 import { getUserData } from '../db/fetch';
+import { auth } from '~/firebase';
 
 // We'll extend our existing AuthContextType to include sign-out functionality
 interface AuthContextValue {
@@ -47,7 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [foundUser, setFoundUser] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const auth = getAuth();
+  // const auth = getAuth();
 
   useEffect(() => {
     // Set up Firebase auth state observer

@@ -19,9 +19,10 @@
   color: white;
   display: grid;
   grid-template-columns: auto 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-areas: icon title;
+  /* grid-template-rows: 1fr 1fr; */
   place-items: center;
-
+  cursor: pointer;
 }
 
 .toolCard:hover {

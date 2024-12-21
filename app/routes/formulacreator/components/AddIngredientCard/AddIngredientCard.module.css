@@ -1,0 +1,19 @@
+.colorRow {
+  padding: 1rem 0.5rem;
+  border-radius: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.5rem;
+  max-width: 100%;
+
+  &>.ingredientInput {
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+
+  &>.amountInput,
+  .addButton {
+    grid-row-start: 2;
+  }
+}
