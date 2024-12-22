@@ -80,7 +80,7 @@ export default function App() {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.home}>
       <div className={styles.backgroundContainer}>
         <div className={styles.gradientBlur1} />
         <div className={styles.gradientBlur2} />

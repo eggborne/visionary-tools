@@ -1,0 +1,68 @@
+.ThemeToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle {
+  position: relative;
+  width: 64px;
+  height: 32px;
+  border-radius: 16px;
+  background-color: #000;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border: none;
+  padding: 0;
+}
+
+.toggle[aria-checked="true"] {
+  /* background-color: #374151; */
+}
+
+.iconContainer {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.moonContainer {
+  left: unset;
+  right: 4px;
+}
+
+.icon {
+  transition: opacity 0.3s;
+}
+
+.sunIcon {
+  color: #fbbf24;
+}
+
+.moonIcon {
+  color: #e5e7eb;
+}
+
+.hidden {
+  opacity: 0.5;
+}
+
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  background-color: #ffffff22;
+  outline: 2px solid #ffffffaa;
+  border-radius: 50%;
+  transition: transform 0.3s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.sliderRight {
+  transform: translateX(32px);
+}

@@ -1,0 +1,325 @@
+.InventoryDisplay {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  & button,
+    input {
+      cursor: pointer;
+      border-radius: 0.25rem;
+      padding: 0.25rem 0.5rem;
+    }
+  
+  & button.addButton {
+    background-color: rgb(80, 148, 65);
+    color: #eee;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+    width: 12rem;
+    display: none;
+  }
+
+  & button.saveButton {
+    background-color: rgb(80, 148, 65);
+    font-size: 150%;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    margin: 1rem;
+    margin-top: 2rem;
+  }
+}
+
+/* Controls Section */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 0 2rem;
+  align-self: center;
+
+  & label {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.5rem;
+  }
+
+  & select {
+    background: var(--background-color);
+
+    & * {
+      color: var(--text-color);
+    }
+  }
+}
+
+.viewControls {
+  display: flex;
+  gap: 0.5rem;
+
+  & > label {
+    cursor: pointer;
+    border-radius: 0.5rem;
+    &.active {
+      /* background-color: #ffffff11; */
+      outline: 0.05rem solid #ffffff44;
+      border-color: rgb(255, 255, 255);
+      & > button {
+        background-color: rgba(18, 234, 32, 0.24);
+      }
+    }
+  }
+  
+}
+
+.viewButton {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+  color: inherit;
+  transition: all 0.2s;
+  outline: 0.1 solid #00000066;
+}
+
+label:hover {
+  & > .viewButton {
+    background-color: rgb(255, 255, 255, 0.2);
+  }
+}
+
+.toggleLabel {
+  display: flex;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggleInput {
+  cursor: pointer;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Sort Controls */
+.sortControls {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  /* flex-grow: 1; */
+}
+
+.sortSelect {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.select {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: inherit;
+}
+
+.directionButton {
+  padding: 0.25rem;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+  color: inherit;
+}
+
+.checkboxOptions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+/* Grid View */
+.cardContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+}
+
+.mainInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.id {
+  color: #999;
+  font-size: 0.875rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--text-color);
+  line-height: 1.2;
+}
+
+.dimensions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.25rem 0;
+}
+
+.dimension {
+  display: flex;
+  align-items: baseline;
+}
+
+.dimensionLabel {
+  color: #999;
+  font-size: 0.875rem;
+  margin-right: 0.25rem;
+}
+
+.dimensionValue {
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.metadata {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.5rem;
+}
+
+.label {
+  color: #999;
+  font-weight: 500;
+}
+
+.quantity {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  height: fit-content;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Table View */
+.tableContainer {
+  overflow-x: auto;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.table th {
+  background-color: rgba(61, 119, 80, 0.05);
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  position: sticky;
+  border-bottom: 0.2rem solid #00000033;
+  
+  top: 0;
+  z-index: 1;
+}
+
+.table th:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.table tr:nth-child(odd) {
+  background-color: var(--odd-line-color);
+}
+
+.table tr:hover td {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sortIcon {
+  width: 1rem;
+  height: 1rem;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.sortIcon.active {
+  opacity: 1;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .cardContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .controls {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .sortControls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .table {
+    font-size: 0.875rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.5rem;
+  }
+}
+
+
+
+@media (min-width: 700px) {
+  * {
+    overscroll-behavior: initial;
+  }
+
+  .controls {
+    flex-direction: row;
+  }
+}

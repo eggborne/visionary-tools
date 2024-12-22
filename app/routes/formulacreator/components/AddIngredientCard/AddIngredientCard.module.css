@@ -6,14 +6,25 @@
   grid-template-rows: 1fr 1fr;
   gap: 0.5rem;
   max-width: 100%;
-
-  &>.ingredientInput {
-    grid-column-start: 1;
-    grid-column-end: 3;
+  background-color: var(--card-color);
+  
+  & input {
+    padding-left: 0.75rem;
   }
 
-  &>.amountInput,
+  & > .ingredientInput {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    
+  }
+
+  & > .amountInput,
   .addButton {
     grid-row-start: 2;
+  }
+
+  & > .addButton {
+    background-color: green;
+    box-shadow: 0 0 0.1rem 0.1rem #00000044;
   }
 }

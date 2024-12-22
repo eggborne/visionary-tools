@@ -14,8 +14,8 @@ const ConfirmModal = ({ isOpen, onConfirm, onCancel }: ConfirmModalProps) => {
         Do you really want to start over?
       </div>
       <div className={style.buttonArea}>
-        <button className='red' onClick={onConfirm}>Do it</button>
-        <button className='green' onClick={onCancel}>Never mind</button>
+        <button className={style.red} onClick={onConfirm}>Do it</button>
+        <button className={style.green} onClick={onCancel}>Never mind</button>
       </div>
     </div>
   );
