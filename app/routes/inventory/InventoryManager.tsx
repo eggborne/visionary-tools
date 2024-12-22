@@ -171,7 +171,7 @@ const InventoryManager = () => {
               <>
               <div className={style.userInfo}>
                   {/* <img src={''} alt={''} /> */}
-                  <div>{'loading user...'}</div>
+                  <div>{'loading...'}</div>
                 </div>
               </>
             }
