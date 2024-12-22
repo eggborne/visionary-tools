@@ -1,0 +1,9 @@
+# Enable mod_rewrite
+RewriteEngine On
+
+# Ensure requests for existing files are served directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Redirect all other requests to index.html
+RewriteRule ^ /index.html [L]

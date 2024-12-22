@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styles from './ToolSelectionArea.module.css';
 import { useAuth } from '../../context/AuthContext';
 import type { Tool } from '../../vistypes';
-import { NavLink, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 
 const tools: Tool[] = [
@@ -10,7 +10,7 @@ const tools: Tool[] = [
     id: 'inventory',
     title: 'Inventory Manager',
     description: 'Track and manage your inventory.',
-    baseUrl: '/inventory/',
+    baseUrl: '/inventory',
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
     </svg>`,
@@ -19,7 +19,7 @@ const tools: Tool[] = [
     id: 'formulacreator',
     title: 'Formula Creator',
     description: 'Create and manage formulas.',
-    baseUrl: '/formulacreator/',
+    baseUrl: '/formulacreator',
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
     </svg>`,
@@ -50,12 +50,11 @@ export default function ToolSelectionArea() {
   return (
     <div className={styles.toolGrid}>
       {tools.map((tool, t) => (
-        <NavLink
+        <Link
           viewTransition
           role='button'
           key={tool.id}
           to={tool.baseUrl}
-          // onClick={() => handleNavigation(tool.baseUrl)}
           className={styles.toolCard}
           style={{
             opacity: visibleTools.includes(tool.id) ? 1 : 0,
@@ -70,7 +69,7 @@ export default function ToolSelectionArea() {
           />
           {<h3 className={styles.toolTitle}>{tool.title}</h3>}
           {/* <p className={styles.toolDescription}>{tool.description}</p> */}
-        </NavLink>
+        </Link>
       ))}
     </div>
   );
