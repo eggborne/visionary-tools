@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styles from './ToolSelectionArea.module.css';
 import { useAuth } from '../../context/AuthContext';
 import type { Tool } from '../../vistypes';
-import { useNavigate } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 
 
 const tools: Tool[] = [
@@ -37,7 +37,6 @@ export default function ToolSelectionArea() {
   };
 
   useEffect(() => {
-    // Animate tools appearing one by one
     const showTools = async () => {
       for (const tool of tools) {
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -48,28 +47,15 @@ export default function ToolSelectionArea() {
     showTools();
   }, []);
 
-  const handleToolClick = async (tool: Tool) => {
-    // Refresh the token before redirecting
-    try {
-      if (user) {
-        // const freshToken = await user.getIdToken(true);
-        // Construct the URL with the auth token
-        const url = new URL(tool.baseUrl);
-        // url.searchParams.set('token', freshToken);
-        window.location.href = url.toString();
-      }
-    } catch (error) {
-      console.error('Error refreshing token:', error);
-    }
-  };
-
   return (
     <div className={styles.toolGrid}>
       {tools.map((tool, t) => (
-        <button
+        <NavLink
+          viewTransition
+          role='button'
           key={tool.id}
-          // href={tool.baseUrl}
-          onClick={() => handleNavigation(tool.baseUrl)}
+          to={tool.baseUrl}
+          // onClick={() => handleNavigation(tool.baseUrl)}
           className={styles.toolCard}
           style={{
             opacity: visibleTools.includes(tool.id) ? 1 : 0,
@@ -84,7 +70,7 @@ export default function ToolSelectionArea() {
           />
           {<h3 className={styles.toolTitle}>{tool.title}</h3>}
           {/* <p className={styles.toolDescription}>{tool.description}</p> */}
-        </button>
+        </NavLink>
       ))}
     </div>
   );

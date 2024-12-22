@@ -9,6 +9,7 @@ import ThemeToggle from './components/ThemeToggle';
 import InventoryDisplay from './components/InventoryDisplay';
 import DatabaseSelection from './components/DatabaseSelection';
 import { auth } from '~/firebase';
+import AddItemModal from './components/AddItemModal';
 
 const generateColumnsFromData = (data: any[]): Column[] => {
   if (data.length === 0) return [];
@@ -83,13 +84,13 @@ const InventoryManager = () => {
           setSelectedDatabase(Object.values(nextUser?.inventoryData.databases)[0]);
         }
         nextUser.preferences = userDBData.preferences;
-        console.log('User data:', nextUser);
         setUser(nextUser);
       }
       return userDBData || null;
     }
 
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser: User | null) => {
+      console.warn('InventoryManager: onAuthStateChanged', firebaseUser);
       if (firebaseUser) {
         getUserData(firebaseUser);
         console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> user logged in!')
@@ -193,7 +194,7 @@ const InventoryManager = () => {
           :
           <div>loading...</div>
         }
-        {/* <AddItemModal isOpen={isModalOpen} onClose={closeModal} /> */}
+        {selectedDatabase  && <AddItemModal isOpen={isModalOpen} columns={columns} selectedDatabase={selectedDatabase?.databaseMetadata.databaseName} onClose={closeModal} />}
       </div>
       <footer className={style.footer}>made with ❤️ by mike@mikedonovan.dev</footer>
     </div>

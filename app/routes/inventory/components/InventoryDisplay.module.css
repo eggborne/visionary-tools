@@ -17,9 +17,9 @@
     background-color: rgb(80, 148, 65);
     color: #eee;
     padding: 0.5rem 1rem;
-    margin-bottom: 1rem;
     width: 12rem;
-    display: none;
+    align-self: center;
+    /* display: none; */
   }
 
   & button.saveButton {
@@ -321,5 +321,7 @@ label:hover {
 
   .controls {
     flex-direction: row;
+    justify-content: space-between;
+    align-self: stretch;
   }
 }

@@ -1,5 +1,6 @@
 {
   "name": "visionary-tools",
+  "homepage": "https://visionary.tools",
   "private": true,
   "type": "module",
   "scripts": {

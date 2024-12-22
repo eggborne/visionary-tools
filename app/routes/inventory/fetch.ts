@@ -20,7 +20,6 @@ async function getUser(uid: string, accessToken: string): Promise<UserDBData | u
     }
 
     const userData = await response.json();
-    console.log('User data:', userData);
     return userData;
 
   } catch (error) {
@@ -76,31 +75,34 @@ const getInventory = async (inventoryName: string, uid: string, accessToken: str
     console.error('Error fetching inventory:', error);
     throw error;
   }
-}
+};
 
-// const addNewItem = async (newItem: InventoryItem): Promise<void> => {
-//   console.log('sending', newItem);
-//   try {
-//     const response = await axios({
-//       method: 'post',
-//       url: `${API_BASE_URL}/addnewitem.php`,
-//       data: newItem,
-//       headers: {
-//         'Content-Type': 'application/json',
-//       }
-//     });
+const addNewItem = async (inventoryName: string, uid: string, accessToken: string, item: InventoryItem): Promise<boolean> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/inventory/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ inventoryName, uid, accessToken, item }),
+    });
 
-//     const result = response.data;
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error response:', errorText);
+      throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+    }
 
-//     if (result.error) {
-//       throw new Error(result.error + (result.details ? `: ${result.details}` : ''));
-//     }
+    if (response.status === 200) {
+      return true;
+    } else {
+      throw new Error('Failed to add item to inventory');
+    }
+  } catch(error) {
+    console.error('Error adding item to inventory:', error);
+    throw error;
+  }
+};
 
-//   } catch (error) {
-//     console.error('Error adding new item:', error);
-//     throw error;
-//   }
-// };
 
-
-export { getInventory, getUser, updateUserPreferences };
+export { addNewItem, getInventory, getUser, updateUserPreferences };

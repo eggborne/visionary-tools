@@ -14,6 +14,8 @@ const getUserData = async (user: User): Promise<User | undefined> => {
     }
 
     const result = await response.json();
+    result.accessToken = user.accessToken;
+    console.log('reesult', result)
     return result;
   } catch (error) {
     console.error('Error getting user data:', error);
