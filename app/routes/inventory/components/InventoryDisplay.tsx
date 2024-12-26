@@ -1,7 +1,7 @@
 import { Fragment, useState, useMemo, useEffect } from 'react';
-import { ArrowUpDown, ArrowUp, ArrowDown, LayoutGrid, Check, X, ListIcon } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown, LayoutGrid, ListIcon } from 'lucide-react';
 import styles from './InventoryDisplay.module.css';
-import type { Column, DatabaseUserData, DataItem, LabelOption, SortConfig, SortOption, VisionaryUser } from '../types';
+import type { Column, ColumnFilter, DatabaseUserData, DataItem, LabelOption, SortConfig, SortOption, VisionaryUser } from '../types';
 import { updateUserPreferences } from '../fetch';
 
 const defaultFormatters = {
@@ -11,46 +11,39 @@ const defaultFormatters = {
 };
 
 interface InventoryDisplayProps {
-  user: VisionaryUser;
+  inventoryUser: VisionaryUser;
   currentInventory: DatabaseUserData;
   data: DataItem[];
+  labelOptions: Record<string, LabelOption>;
+  columnFilters: Record<string, ColumnFilter>;
   columns: Column[];
   openModal: () => void;
 }
 
-const InventoryDisplay = ({ data, columns, user, openModal }: InventoryDisplayProps) => {
+const InventoryDisplay = ({ data, labelOptions, columnFilters, columns, inventoryUser, openModal }: InventoryDisplayProps) => {
   const [groupIdentical, setGroupIdentical] = useState(true);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'width', direction: 'desc' });
 
   useEffect(() => {
-    if (!user.preferences) return;
-    if (user.preferences?.sortConfig !== sortConfig) {
-      setSortConfig(user.preferences.sortConfig);
+    if (!inventoryUser.preferences) return;
+    if (inventoryUser.preferences?.sortConfig !== sortConfig) {
+      setSortConfig(inventoryUser.preferences.sortConfig);
     }
-    if (user.preferences?.viewMode !== viewMode) {
-      setViewMode(user.preferences.viewMode);
+    if (inventoryUser.preferences?.viewMode !== viewMode) {
+      setViewMode(inventoryUser.preferences.viewMode);
     }
   }, []);
 
   useEffect(() => {
-    if (user.preferences?.viewMode !== viewMode) {
-      updateUserPreferences(user.visionaryData.uid, user.visionaryData.accessToken, 'preferences', { ...user.preferences, viewMode });
+    if (inventoryUser.preferences?.viewMode !== viewMode) {
+      updateUserPreferences(inventoryUser.visionaryData.uid, inventoryUser.visionaryData.accessToken, 'preferences', { ...inventoryUser.preferences, viewMode });
     }
   }, [viewMode])
 
-  // useEffect(() => {
-  //   // if (user.preferences?.groupIdentical !== groupIdentical || user.preferences?.viewMode !== viewMode || user.preferences?.sortConfig !== sortConfig) {
-  //   if (user.preferences?.viewMode && user.preferences?.viewMode !== viewMode) {
-  //     console.log('updating differing iewMode!', user.preferences);
-  //     updateUserPreferences(user.visionaryData.uid, user.visionaryData.accessToken, 'preferences', { ...user.preferences });
-  //   }
-
-  // }, [viewMode])
-
   useEffect(() => {
     if (sortConfig) {
-      updateUserPreferences(user.visionaryData.uid, user.visionaryData.accessToken, 'preferences', { ...user.preferences, sortConfig });
+      updateUserPreferences(inventoryUser.visionaryData.uid, inventoryUser.visionaryData.accessToken, 'preferences', { ...inventoryUser.preferences, sortConfig });
     }
   }, [sortConfig]);
 
@@ -122,63 +115,6 @@ const InventoryDisplay = ({ data, columns, user, openModal }: InventoryDisplayPr
       : <ArrowDown className={`${styles.sortIcon} ${styles.active}`} />;
   };
 
-  const labelOptions: Record<string, LabelOption> = {
-    id: {
-      shortName: 'ID',
-      longName: 'Item ID',
-      specialType: 'id'
-    },
-    width: {
-      shortName: 'W',
-      longName: 'Width',
-      specialType: 'dimension'
-    },
-    height: {
-      shortName: 'H',
-      longName: 'Height',
-      specialType: 'dimension'
-    },
-    depth: {
-      shortName: 'D',
-      longName: 'Depth',
-      specialType: 'dimension'
-    },
-    price: {
-      specialType: 'usd'
-    },
-    wired: {
-      specialType: 'boolean'
-    },
-    signed: {
-      specialType: 'boolean'
-    },
-    wrapped: {
-      specialType: 'boolean'
-    },
-    urgent: {
-      specialType: 'boolean'
-    },
-    finished: {
-      specialType: 'boolean'
-    }
-  };
-
-  const columnFilters: Record<any, any> = {
-    id: { prepend: '#' },
-    boolean: { replace: { 0: <X color='red' size={'1.25rem'} />, 1: <Check color='lightgreen' size={'1.25rem'} /> } },
-    dimension: { append: '"' },
-    usd: { prepend: '$' },
-    width: { append: '"' },
-    height: { append: '"' },
-    depth: { append: '"' },
-    price: { prepend: '$' },
-    wired: { replace: { 0: <X color='red' />, 1: 'Yes' } },
-    signed: { replace: { 0: 'No', 1: 'Yes' } },
-    wrapped: { replace: { 0: 'No', 1: 'Yes' } },
-    urgent: { replace: { 0: 'No', 1: 'Yes' } },
-    finished: { replace: { 0: 'No', 1: <Check color='lightgreen' /> } }
-  };
-
   const processItem = (item: DataItem) => {
     const processedItem = { ...item };
     for (const key in columnFilters) {
@@ -191,7 +127,9 @@ const InventoryDisplay = ({ data, columns, user, openModal }: InventoryDisplayPr
           processedItem[key] = processedItem[key] + columnFilters[specialType].append;
         }
         if (columnFilters[specialType].replace) {
-          processedItem[key] = columnFilters[specialType].replace[processedItem[key]];
+          if (processedItem[key]) {
+            processedItem[key] = columnFilters[specialType].replace[processedItem[key]];
+          } else if (processedItem.specialType === 'boolean') {}
         }
       }
     }
@@ -346,7 +284,6 @@ const InventoryDisplay = ({ data, columns, user, openModal }: InventoryDisplayPr
                     className={styles.tableHeader}
                   >
                     <div className={styles.headerContent}>
-                      {/* {column.label} */}
                       {(labelOptions[column.key] && labelOptions[column.key].shortName) || column.label}
                       <SortIcon columnKey={column.key} />
                     </div>

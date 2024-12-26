@@ -74,11 +74,17 @@ export type SortConfig = {
   direction: 'asc' | 'desc';
 };
 
-export type LabelOption = {
+export interface LabelOption {
   shortName?: string,
   longName?: string,
   specialType?: string;
-};
+}
+
+export interface ColumnFilter {
+  prepend?: string;
+  append?: string;
+  replace?: Record<string | number, string | boolean>;
+}
 
 export interface InventoryGridProps {
   data: DataItem[];

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import style from './InventoryManager.module.css';
-import type { Column, DatabaseUserData, FirebaseUserData, InventoryItem, UserDBData, VisionaryUser } from './types';
+import type { Column, ColumnFilter, DatabaseUserData, FirebaseUserData, InventoryItem, LabelOption, UserDBData, VisionaryUser } from './types';
+import { Check, X } from 'lucide-react';
 import { getInventory, getUser, updateUserPreferences } from './fetch'
 import { onAuthStateChanged } from 'firebase/auth';
 import type { User } from 'firebase/auth';
@@ -10,6 +11,15 @@ import InventoryDisplay from './components/InventoryDisplay';
 import DatabaseSelection from './components/DatabaseSelection';
 import { auth } from '~/firebase';
 import AddItemModal from './components/AddItemModal';
+import config from './config.json';
+
+const labelOptions: Record<string, LabelOption> = {
+  ...config.labelOptions
+};
+
+const columnFilters: Record<string, ColumnFilter> = {
+  ...config.columnFilters
+};
 
 const generateColumnsFromData = (data: any[]): Column[] => {
   if (data.length === 0) return [];
@@ -33,23 +43,24 @@ const InventoryManager = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const [user, setUser] = useState<VisionaryUser | null>(null);
+  const [inventoryUser, setUser] = useState<VisionaryUser | null>(null);
 
   const fetchInv = async (dbName: string, uid: string, accessToken: string) => {
     const startTime = Date.now();
     const items = await getInventory(dbName, uid, accessToken);
+    console.log(items[0])
     setInventoryData(items);
     console.warn(items.length, 'items fetched in', (Date.now() - startTime), 'ms');
   }
 
   const handleSelectionChange = (databaseName: string) => {
-    if (user) {
-      const nextSelected = Object.values(user?.inventoryData.databases).find(
+    if (inventoryUser) {
+      const nextSelected = Object.values(inventoryUser?.inventoryData.databases).find(
         db => db.databaseMetadata.databaseName === databaseName
       );
       if (nextSelected) {
         setSelectedDatabase(nextSelected);
-        updateUserPreferences(user.visionaryData.uid, user.visionaryData.accessToken, 'preferences', { ...user.preferences, lastDatabase: databaseName });
+        updateUserPreferences(inventoryUser.visionaryData.uid, inventoryUser.visionaryData.accessToken, 'preferences', { ...inventoryUser.preferences, lastDatabase: databaseName });
       }
     }
   };
@@ -93,7 +104,7 @@ const InventoryManager = () => {
       console.warn('InventoryManager: onAuthStateChanged', firebaseUser);
       if (firebaseUser) {
         getUserData(firebaseUser);
-        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> user logged in!')
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> inventoryUser logged in!')
       } else {
         window.location.href = 'https://visionary.tools/';
       }
@@ -107,19 +118,19 @@ const InventoryManager = () => {
   }, []);
 
   useEffect(() => {
-    if (user) {
-      const dbNameList = Object.keys(user.inventoryData.databases);
+    if (inventoryUser) {
+      const dbNameList = Object.keys(inventoryUser.inventoryData.databases);
       if (dbNameList.length > 0 && selectedDatabase) {
         const nextDatabase = selectedDatabase.databaseMetadata.databaseName
-        nextDatabase && fetchInv(nextDatabase || '', user.visionaryData.uid, user.visionaryData.accessToken);
+        nextDatabase && fetchInv(nextDatabase || '', inventoryUser.visionaryData.uid, inventoryUser.visionaryData.accessToken);
       }
     }
-  }, [user, selectedDatabase]);
+  }, [inventoryUser, selectedDatabase]);
 
   useEffect(() => {
     if (inventoryData.length > 0) {
       // First check if columns are defined in database metadata
-      // const dbColumns = user?.inventoryData.databases[CURRENT_INVENTORY]?.databaseMetadata.columns;
+      // const dbColumns = inventoryUser?.inventoryData.databases[CURRENT_INVENTORY]?.databaseMetadata.columns;
       const dbColumns = false;
       if (dbColumns) {
         setColumns(dbColumns);
@@ -128,7 +139,7 @@ const InventoryManager = () => {
         setColumns(generateColumnsFromData(inventoryData));
       }
     }
-  }, [inventoryData, user]);
+  }, [inventoryData, inventoryUser]);
 
   const toggleDarkMode = (newDarkState: boolean) => {
     setIsDarkMode(newDarkState);
@@ -144,8 +155,8 @@ const InventoryManager = () => {
       document.documentElement.style.setProperty('--odd-line-color', '#0000000d');
     }
     // localStorage.setItem('darkMode', JSON.stringify(newDarkState));
-    if (user) {
-      updateUserPreferences(user.visionaryData.uid, user.visionaryData.accessToken, 'preferences', { ...user.preferences, darkMode: newDarkState });
+    if (inventoryUser) {
+      updateUserPreferences(inventoryUser.visionaryData.uid, inventoryUser.visionaryData.accessToken, 'preferences', { ...inventoryUser.preferences, darkMode: newDarkState });
     }
   }
 
@@ -155,14 +166,14 @@ const InventoryManager = () => {
         {loaded &&
           <>
             {/* <div className='userInfo'> */}
-            {user ?
+            {inventoryUser ?
               <>
               <div className={style.userInfo}>
-                  <img src={user.visionaryData.photoUrl || ''} alt={user.visionaryData.displayName || ''} />
-                  <div>{user.visionaryData.displayName}</div>
+                  <img src={inventoryUser.visionaryData.photoUrl || ''} alt={inventoryUser.visionaryData.displayName || ''} />
+                  <div>{inventoryUser.visionaryData.displayName}</div>
                 </div>
                 <DatabaseSelection
-                  databases={Object.values(user?.inventoryData?.databases || {}) || []}
+                  databases={Object.values(inventoryUser?.inventoryData?.databases || {}) || []}
                   selectedDatabase={selectedDatabase}
                   onDatabaseSelect={handleSelectionChange}
                 />
@@ -181,20 +192,22 @@ const InventoryManager = () => {
         }
       </div>
       <div className={style.main} style={{ opacity: loaded ? 1 : 0 }}>
-        {(user && selectedDatabase && inventoryData.length > 0) ?
+        {(inventoryUser && selectedDatabase && inventoryData.length > 0) ?
           <>
             <InventoryDisplay
               currentInventory={selectedDatabase}
               data={inventoryData}
+              labelOptions={labelOptions}
+              columnFilters={columnFilters}
               columns={columns}
-              user={user}
+              inventoryUser={inventoryUser}
               openModal={openModal}
             />
           </>
           :
           <div>loading...</div>
         }
-        {selectedDatabase  && <AddItemModal isOpen={isModalOpen} columns={columns} selectedDatabase={selectedDatabase?.databaseMetadata.databaseName} onClose={closeModal} />}
+        {selectedDatabase && <AddItemModal isOpen={isModalOpen} labelOptions={labelOptions} columnFilters={columnFilters} columns={columns} selectedDatabase={selectedDatabase?.databaseMetadata.databaseName} onClose={closeModal} />}
       </div>
       <footer className={style.footer}>made with ❤️ by mike@mikedonovan.dev</footer>
     </div>

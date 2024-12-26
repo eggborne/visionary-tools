@@ -1,10 +1,12 @@
 import styles from './AddItemModal.module.css';
 import { addNewItem } from '../fetch';
-import type { Column } from '../types';
+import type { Column, ColumnFilter, LabelOption } from '../types';
 import { useAuth } from '~/context/AuthContext';
 
 interface ModalProps {
   isOpen: boolean;
+  labelOptions: Record<string, LabelOption>;
+  columnFilters: Record<string, ColumnFilter>;
   columns: Column[];
   selectedDatabase: string;
   onClose: () => void;
@@ -12,25 +14,14 @@ interface ModalProps {
 
 const AddItemModal = ({ isOpen, columns, selectedDatabase, onClose }: ModalProps) => {
 
-  const { user } = useAuth()
+  const { user } = useAuth();
+
+  console.log('columns is', columns)
 
   const handleSubmitItemForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
-    const quantity = parseInt(formData.get('quantity') as string, 10);
-    // const newItem = {
-    //   width: parseInt(formData.get('width') as string, 10),
-    //   height: parseInt(formData.get('height') as string, 10),
-    //   depth: parseInt(formData.get('depth') as string, 10),
-    //   location: formData.get('location') as string,
-    //   origin: formData.get('origin') as string,
-    //   packaging: formData.get('packaging') as string,
-    //   notes: formData.get('notes') as string,
-    // };
-
-    // replace the above with dynamic object creation from 'columns' prop
-
     const newItem = columns.reduce((acc, column) => {
       const value = formData.get(column.key);
       if (value !== null) {
@@ -44,20 +35,18 @@ const AddItemModal = ({ isOpen, columns, selectedDatabase, onClose }: ModalProps
     }, {} as { [key: string]: string | number });
 
     console.log('new item', newItem);
-    if (user) {
-    //   for (let i = 0; i < quantity; i++) {
-        await addNewItem(selectedDatabase, user.uid, user.accessToken || '', newItem);
-        console.warn('added a canvas!')
-      // }
+    if (user?.accessToken) {
+      await addNewItem(selectedDatabase, user.uid, user.accessToken, newItem);
+      console.warn('added a canvas!')
+      onClose();
     }
-    // onClose();
   };
 
   return (
     <div className={styles.modalOverlay + (isOpen ? ' ' + styles.active : '')} onClick={onClose}>
       <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
         <form onSubmit={handleSubmitItemForm}>
-          {/* <div className={styles.formRow + ' ' + styles.multi}>
+          {<div className={styles.formRow + ' ' + styles.multi}>
             <div className={styles.inputColumn}>
               <label htmlFor='width' className={styles.inputLabel}>Width</label>
               <input name='width' id='width' type='number' min='0'></input>
@@ -72,16 +61,15 @@ const AddItemModal = ({ isOpen, columns, selectedDatabase, onClose }: ModalProps
             </div>
           </div>}
 
-          {/* replace the above with dynamic mapped list */}
-          {columns.map((column) => (
+          {columns.filter(c => ['width', 'height', 'depth'].indexOf(c.key) === -1).map((column) => (
             <div key={column.key} className={styles.formRow}>
               <label htmlFor={column.key} className={styles.inputLabel}>{column.label}</label>
-              <input name={column.key} id={column.key} type={column.type}></input>
+              <input name={column.key} id={column.key} type={column.type} placeholder={column.key === 'id' ? 'auto' : ''}></input>
             </div>
           ))}
 
           <button type='submit' className={styles.saveButton}>Add to list</button>
-          <button type='button' className={styles.cancelButton}>Cancel</button>
+          <button type='button' onClick={onClose} className={styles.cancelButton}>Cancel</button>
         </form>
       </div>
     </div>)

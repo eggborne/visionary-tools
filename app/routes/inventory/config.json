@@ -1,0 +1,71 @@
+{
+  "labelOptions": {
+    "id": {
+      "shortName": "ID",
+      "longName": "Item ID",
+      "specialType": "id"
+    },
+    "width": {
+      "shortName": "W",
+      "longName": "Width",
+      "specialType": "dimension"
+    },
+    "height": {
+      "shortName": "H",
+      "longName": "Height",
+      "specialType": "dimension"
+    },
+    "depth": {
+      "shortName": "D",
+      "longName": "Depth",
+      "specialType": "dimension"
+    },
+    "price": {
+      "specialType": "usd"
+    },
+    "wired": {
+      "specialType": "boolean"
+    },
+    "signed": {
+      "specialType": "boolean"
+    },
+    "wrapped": {
+      "specialType": "boolean"
+    },
+    "urgent": {
+      "specialType": "boolean"
+    },
+    "finished": {
+      "specialType": "boolean"
+    }
+  },
+  "columnFilters": {
+    "id": {
+      "prepend": "#"
+    },
+    "boolean": {
+      "replace": {
+        "0": false,
+        "1": true
+      }
+    },
+    "dimension": {
+      "append": "\""
+    },
+    "usd": {
+      "prepend": "$"
+    },
+    "width": {
+      "append": "\""
+    },
+    "height": {
+      "append": "\""
+    },
+    "depth": {
+      "append": "\""
+    },
+    "price": {
+      "prepend": "$"
+    }
+  }
+}
