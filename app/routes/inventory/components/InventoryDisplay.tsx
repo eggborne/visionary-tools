@@ -21,9 +21,10 @@ interface InventoryDisplayProps {
 }
 
 const InventoryDisplay = ({ data, labelOptions, columnFilters, columns, inventoryUser, openModal }: InventoryDisplayProps) => {
+  const [firstLoadDone, setFirstLoadDone] = useState(false);
   const [groupIdentical, setGroupIdentical] = useState(true);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
-  const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'width', direction: 'desc' });
+  const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'width',direction: 'desc' });
 
   useEffect(() => {
     if (!inventoryUser.preferences) return;
@@ -33,19 +34,25 @@ const InventoryDisplay = ({ data, labelOptions, columnFilters, columns, inventor
     if (inventoryUser.preferences?.viewMode !== viewMode) {
       setViewMode(inventoryUser.preferences.viewMode);
     }
+    if (inventoryUser.preferences?.groupIdentical !== groupIdentical) {
+      setGroupIdentical(inventoryUser.preferences.groupIdentical);
+    }
+    setFirstLoadDone(true);
   }, []);
 
   useEffect(() => {
-    if (inventoryUser.preferences?.viewMode !== viewMode) {
-      updateUserPreferences(inventoryUser.visionaryData.uid, inventoryUser.visionaryData.accessToken, 'preferences', { ...inventoryUser.preferences, viewMode });
+    if (firstLoadDone) {
+      if (inventoryUser.preferences?.viewMode !== viewMode) {
+        updateUserPreferences(inventoryUser.visionaryData.uid, inventoryUser.visionaryData.accessToken, 'preferences', { ...inventoryUser.preferences, viewMode }, );
+      }
+      if (inventoryUser.preferences?.sortConfig !== sortConfig) {
+        updateUserPreferences(inventoryUser.visionaryData.uid, inventoryUser.visionaryData.accessToken, 'preferences', { ...inventoryUser.preferences, sortConfig }, );
+      }
+      if (inventoryUser.preferences?.groupIdentical !== groupIdentical) {
+        updateUserPreferences(inventoryUser.visionaryData.uid, inventoryUser.visionaryData.accessToken, 'preferences', { ...inventoryUser.preferences, groupIdentical }, );
+      }
     }
-  }, [viewMode])
-
-  useEffect(() => {
-    if (sortConfig) {
-      updateUserPreferences(inventoryUser.visionaryData.uid, inventoryUser.visionaryData.accessToken, 'preferences', { ...inventoryUser.preferences, sortConfig });
-    }
-  }, [sortConfig]);
+  }, [viewMode, sortConfig, groupIdentical])
 
   const hasIdenticalItems = useMemo(() => {
     const itemSet = new Set();

@@ -1,7 +1,8 @@
-// import axios from 'axios';
 import type { InventoryItem, UserDBData } from './types';
 
-const API_BASE_URL = 'https://visionary.tools/api';
+console.log('ENV', process.env.NODE_ENV);
+
+const API_BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api' : 'https://visionary.tools/api';
 
 async function getUser(uid: string, accessToken: string): Promise<UserDBData | undefined> {
   try {
@@ -20,6 +21,9 @@ async function getUser(uid: string, accessToken: string): Promise<UserDBData | u
     }
 
     const userData = await response.json();
+    console.log('getUser userData:', userData);
+    userData.authorizations = JSON.parse(userData.authorizations);
+    userData.preferences = JSON.parse(userData.preferences);
     return userData;
 
   } catch (error) {
@@ -57,7 +61,7 @@ const getInventory = async (inventoryName: string, uid: string, accessToken: str
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ inventoryName, uid, accessToken }),
+      body: JSON.stringify({ databaseName: inventoryName, uid, accessToken }),
     });
     if (!response.ok) {
       const errorText = await response.text();

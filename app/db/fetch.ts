@@ -1,8 +1,10 @@
 import type { User } from "../vistypes";
 
+const API_URL = 'https://visionary.tools/api';
+
 const getUserData = async (user: User): Promise<User | undefined> => {
   try {
-    const response = await fetch(`https://visionary.tools/api/users/validate`, {
+    const response = await fetch(`${API_URL}/users/validate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -14,9 +16,8 @@ const getUserData = async (user: User): Promise<User | undefined> => {
     }
 
     const result = await response.json();
-    result.accessToken = user.accessToken;
-    console.log('reesult', result)
-    return result;
+    console.log('result.user', result.user)
+    return result.user;
   } catch (error) {
     console.error('Error getting user data:', error);
     return undefined;

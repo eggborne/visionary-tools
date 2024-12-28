@@ -76,6 +76,7 @@ const InventoryManager = () => {
       };
       const userDBData = await getUser(invUser.uid, invUser.accessToken);
       if (userDBData) {
+        console.log('userDBData:', userDBData);
         if (userDBData.preferences.darkMode !== undefined) {
           toggleDarkMode(userDBData.preferences.darkMode);
         } else {
@@ -119,7 +120,9 @@ const InventoryManager = () => {
 
   useEffect(() => {
     if (inventoryUser) {
+      console.log('inventoryUser:', inventoryUser);
       const dbNameList = Object.keys(inventoryUser.inventoryData.databases);
+      console.log('db name list:', dbNameList);
       if (dbNameList.length > 0 && selectedDatabase) {
         const nextDatabase = selectedDatabase.databaseMetadata.databaseName
         nextDatabase && fetchInv(nextDatabase || '', inventoryUser.visionaryData.uid, inventoryUser.visionaryData.accessToken);
