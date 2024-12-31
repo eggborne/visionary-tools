@@ -5,8 +5,6 @@ import { useAuth } from '~/context/AuthContext';
 
 interface ModalProps {
   isOpen: boolean;
-  labelOptions: Record<string, LabelOption>;
-  columnFilters: Record<string, ColumnFilter>;
   columns: Column[];
   selectedDatabase: string;
   onClose: () => void;
@@ -15,8 +13,6 @@ interface ModalProps {
 const AddItemModal = ({ isOpen, columns, selectedDatabase, onClose }: ModalProps) => {
 
   const { user } = useAuth();
-
-  console.log('columns is', columns)
 
   const handleSubmitItemForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

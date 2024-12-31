@@ -57,7 +57,7 @@ export default function App() {
   };
 
   if (user) {
-    console.log('user is', user)
+    console.log('user is ---------->', user)
   }
 
   // Show loading state while authentication state is being determined

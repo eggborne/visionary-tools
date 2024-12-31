@@ -1,79 +1,79 @@
 {
   "app": {
     "app.css": {
-      "size": 640,
+      "size": 677,
       "type": "css",
-      "lastModified": "2024-12-21T23:44:27.591Z",
+      "lastModified": "2024-12-28T01:11:54.356Z",
       "lines": 38
     },
     "components": {
       "GoogleSignIn.module.css": {
         "size": 888,
         "type": "css",
-        "lastModified": "2024-12-14T02:47:07.116Z",
+        "lastModified": "2024-12-28T01:11:54.357Z",
         "lines": 49
       },
       "GoogleSignIn.tsx": {
         "size": 1519,
         "type": "tsx",
-        "lastModified": "2024-12-21T04:07:13.257Z",
+        "lastModified": "2024-12-28T01:11:54.358Z",
         "lines": 38
       },
       "ToolSelectionArea": {
         "ToolSelectionArea.module.css": {
           "size": 1740,
           "type": "css",
-          "lastModified": "2024-12-21T05:16:08.337Z",
+          "lastModified": "2024-12-28T01:11:54.365Z",
           "lines": 85
         },
         "ToolSelectionArea.tsx": {
-          "size": 2286,
+          "size": 2201,
           "type": "tsx",
-          "lastModified": "2024-12-22T03:48:03.268Z",
-          "lines": 76
+          "lastModified": "2024-12-31T05:43:10.389Z",
+          "lines": 74
         }
       },
       "UserInfo": {
         "UserInfo.module.css": {
           "size": 707,
           "type": "css",
-          "lastModified": "2024-12-22T01:00:16.040Z",
+          "lastModified": "2024-12-28T01:11:54.367Z",
           "lines": 35
         },
         "UserInfo.tsx": {
           "size": 963,
           "type": "tsx",
-          "lastModified": "2024-12-15T05:35:53.149Z",
+          "lastModified": "2024-12-28T01:11:54.368Z",
           "lines": 33
         }
       }
     },
     "context": {
       "AuthContext.tsx": {
-        "size": 3024,
+        "size": 3484,
         "type": "tsx",
-        "lastModified": "2024-12-22T02:31:01.195Z",
-        "lines": 99
+        "lastModified": "2024-12-31T18:56:15.195Z",
+        "lines": 112
       }
     },
     "db": {
-      "fetch.ts": {
-        "size": 723,
+      "user.ts": {
+        "size": 1739,
         "type": "ts",
-        "lastModified": "2024-12-22T02:34:21.784Z",
-        "lines": 27
+        "lastModified": "2024-12-31T17:38:15.764Z",
+        "lines": 56
       }
     },
     "firebase.ts": {
       "size": 1762,
       "type": "ts",
-      "lastModified": "2024-12-21T22:59:58.857Z",
+      "lastModified": "2024-12-28T01:11:54.370Z",
       "lines": 60
     },
     "root.tsx": {
-      "size": 1953,
+      "size": 2032,
       "type": "tsx",
-      "lastModified": "2024-12-21T04:30:29.002Z",
+      "lastModified": "2024-12-28T01:11:54.371Z",
       "lines": 80
     },
     "routes": {
@@ -83,13 +83,13 @@
             "AddIngredientCard.module.css": {
               "size": 539,
               "type": "css",
-              "lastModified": "2024-12-21T21:38:37.524Z",
+              "lastModified": "2024-12-28T01:11:54.375Z",
               "lines": 30
             },
             "AddIngredientCard.tsx": {
-              "size": 1329,
+              "size": 1373,
               "type": "tsx",
-              "lastModified": "2024-12-21T05:29:04.919Z",
+              "lastModified": "2024-12-28T01:11:54.376Z",
               "lines": 45
             }
           },
@@ -97,13 +97,13 @@
             "ConfirmModal.module.css": {
               "size": 712,
               "type": "css",
-              "lastModified": "2024-12-21T22:47:43.075Z",
+              "lastModified": "2024-12-28T01:11:54.377Z",
               "lines": 41
             },
             "ConfirmModal.tsx": {
-              "size": 666,
+              "size": 690,
               "type": "tsx",
-              "lastModified": "2024-12-21T22:48:22.053Z",
+              "lastModified": "2024-12-28T01:11:54.378Z",
               "lines": 25
             }
           },
@@ -111,13 +111,13 @@
             "MixDisplay.module.css": {
               "size": 548,
               "type": "css",
-              "lastModified": "2024-12-21T22:49:37.414Z",
+              "lastModified": "2024-12-28T01:11:54.379Z",
               "lines": 32
             },
             "MixDisplay.tsx": {
-              "size": 806,
+              "size": 831,
               "type": "tsx",
-              "lastModified": "2024-12-21T22:03:04.875Z",
+              "lastModified": "2024-12-28T01:11:54.379Z",
               "lines": 26
             }
           }
@@ -126,39 +126,39 @@
           "colors.json": {
             "size": 2958,
             "type": "json",
-            "lastModified": "2024-11-12T05:40:48.949Z",
+            "lastModified": "2024-12-28T01:11:54.380Z",
             "lines": 88
           }
         },
         "FormulaCreator.module.css": {
           "size": 2996,
           "type": "css",
-          "lastModified": "2024-12-21T22:12:14.502Z",
+          "lastModified": "2024-12-28T01:11:54.373Z",
           "lines": 161
         },
         "FormulaCreator.tsx": {
-          "size": 3636,
+          "size": 3742,
           "type": "tsx",
-          "lastModified": "2024-12-21T21:54:36.518Z",
+          "lastModified": "2024-12-28T01:11:54.373Z",
           "lines": 107
         },
         "types.ts": {
           "size": 103,
           "type": "ts",
-          "lastModified": "2024-12-21T05:28:12.023Z",
+          "lastModified": "2024-12-28T01:11:54.381Z",
           "lines": 5
         }
       },
       "home.module.css": {
-        "size": 4798,
+        "size": 5073,
         "type": "css",
-        "lastModified": "2024-12-21T21:08:12.625Z",
+        "lastModified": "2024-12-31T17:42:13.947Z",
         "lines": 276
       },
       "home.tsx": {
-        "size": 3562,
+        "size": 3700,
         "type": "tsx",
-        "lastModified": "2024-12-21T21:08:17.862Z",
+        "lastModified": "2024-12-31T06:25:27.036Z",
         "lines": 127
       },
       "inventory": {
@@ -166,122 +166,128 @@
           "AddItemModal.module.css": {
             "size": 1833,
             "type": "css",
-            "lastModified": "2024-12-22T02:37:53.090Z",
+            "lastModified": "2024-12-28T01:11:54.385Z",
             "lines": 101
           },
           "AddItemModal.tsx": {
-            "size": 3547,
+            "size": 2985,
             "type": "tsx",
-            "lastModified": "2024-12-22T02:46:08.042Z",
-            "lines": 91
+            "lastModified": "2024-12-31T00:07:37.507Z",
+            "lines": 75
           },
           "DatabaseSelection.module.css": {
             "size": 2402,
             "type": "css",
-            "lastModified": "2024-12-21T00:18:09.943Z",
+            "lastModified": "2024-12-28T01:11:54.387Z",
             "lines": 123
           },
           "DatabaseSelection.tsx": {
             "size": 1017,
             "type": "tsx",
-            "lastModified": "2024-12-21T23:27:20.172Z",
+            "lastModified": "2024-12-28T01:11:54.388Z",
             "lines": 32
           },
           "InventoryDisplay.module.css": {
-            "size": 5492,
+            "size": 167,
             "type": "css",
-            "lastModified": "2024-12-22T00:56:24.511Z",
-            "lines": 327
+            "lastModified": "2024-12-31T22:54:39.091Z",
+            "lines": 9
           },
           "InventoryDisplay.tsx": {
-            "size": 13073,
+            "size": 2033,
             "type": "tsx",
-            "lastModified": "2024-12-22T00:10:08.083Z",
-            "lines": 375
+            "lastModified": "2024-12-31T22:53:12.330Z",
+            "lines": 72
           },
           "ThemeToggle.module.css": {
             "size": 1031,
             "type": "css",
-            "lastModified": "2024-12-12T05:50:24.112Z",
+            "lastModified": "2024-12-31T17:48:32.575Z",
             "lines": 68
           },
           "ThemeToggle.tsx": {
-            "size": 1058,
+            "size": 1108,
             "type": "tsx",
-            "lastModified": "2024-12-12T05:04:06.841Z",
-            "lines": 36
+            "lastModified": "2024-12-31T17:48:29.634Z",
+            "lines": 37
           }
         },
+        "config.json": {
+          "size": 1251,
+          "type": "json",
+          "lastModified": "2024-12-28T01:11:54.391Z",
+          "lines": 71
+        },
         "fetch.ts": {
-          "size": 3416,
+          "size": 2782,
           "type": "ts",
-          "lastModified": "2024-12-22T02:20:57.753Z",
-          "lines": 108
+          "lastModified": "2024-12-31T04:56:13.855Z",
+          "lines": 84
         },
         "InventoryManager.module.css": {
-          "size": 1484,
+          "size": 1585,
           "type": "css",
-          "lastModified": "2024-12-22T01:48:12.719Z",
-          "lines": 83
+          "lastModified": "2024-12-31T22:51:52.379Z",
+          "lines": 84
         },
         "InventoryManager.tsx": {
-          "size": 8042,
+          "size": 7316,
           "type": "tsx",
-          "lastModified": "2024-12-22T03:16:38.369Z",
-          "lines": 205
+          "lastModified": "2024-12-31T22:03:48.117Z",
+          "lines": 180
         },
         "types.ts": {
-          "size": 2018,
+          "size": 1942,
           "type": "ts",
-          "lastModified": "2024-12-21T23:24:20.543Z",
-          "lines": 97
+          "lastModified": "2024-12-31T19:35:48.058Z",
+          "lines": 93
         }
       }
     },
     "routes.ts": {
-      "size": 281,
+      "size": 289,
       "type": "ts",
-      "lastModified": "2024-12-21T23:22:45.147Z",
+      "lastModified": "2024-12-28T01:11:54.372Z",
       "lines": 9
     },
     "vistypes.ts": {
-      "size": 387,
+      "size": 417,
       "type": "ts",
-      "lastModified": "2024-12-21T04:15:46.855Z",
-      "lines": 21
+      "lastModified": "2024-12-31T04:51:00.281Z",
+      "lines": 22
     }
   },
   "build": {},
   "Dockerfile": {
-    "size": 599,
+    "size": 620,
     "type": "unknown",
-    "lastModified": "2024-12-11T18:17:16.000Z",
+    "lastModified": "2024-12-28T01:11:54.353Z",
     "lines": 22
   },
   "Dockerfile.bun": {
-    "size": 705,
+    "size": 729,
     "type": "bun",
-    "lastModified": "2024-12-11T18:17:16.000Z",
+    "lastModified": "2024-12-28T01:11:54.353Z",
     "lines": 25
   },
   "Dockerfile.pnpm": {
-    "size": 752,
+    "size": 777,
     "type": "pnpm",
-    "lastModified": "2024-12-11T18:17:16.000Z",
+    "lastModified": "2024-12-28T01:11:54.354Z",
     "lines": 26
   },
   "node_modules": {},
   "package-lock.json": {
-    "size": 196131,
+    "size": 237297,
     "type": "json",
-    "lastModified": "2024-12-21T23:19:24.227Z",
-    "lines": 5433
+    "lastModified": "2024-12-31T18:59:30.224Z",
+    "lines": 6359
   },
   "package.json": {
-    "size": 984,
+    "size": 1238,
     "type": "json",
-    "lastModified": "2024-12-22T01:41:48.538Z",
-    "lines": 36
+    "lastModified": "2024-12-31T18:59:29.558Z",
+    "lines": 42
   },
   "public": {
     "favicon.svg": {
@@ -292,33 +298,33 @@
     }
   },
   "react-router.config.ts": {
-    "size": 183,
+    "size": 189,
     "type": "ts",
-    "lastModified": "2024-12-22T03:38:59.909Z",
+    "lastModified": "2024-12-28T01:11:54.398Z",
     "lines": 7
   },
   "README.md": {
-    "size": 2129,
+    "size": 2229,
     "type": "md",
-    "lastModified": "2024-12-11T18:17:16.000Z",
+    "lastModified": "2024-12-28T01:11:54.355Z",
     "lines": 101
   },
   "tsconfig.json": {
-    "size": 605,
+    "size": 632,
     "type": "json",
-    "lastModified": "2024-12-11T18:17:16.000Z",
+    "lastModified": "2024-12-28T01:11:54.399Z",
     "lines": 28
   },
-  "visionary-tools.zip": {
-    "size": 22917,
-    "type": "zip",
-    "lastModified": "2024-12-21T20:58:07.741Z",
-    "lines": 107
+  "visionary-tools-structure.json": {
+    "size": 8335,
+    "type": "json",
+    "lastModified": "2024-12-31T19:01:17.616Z",
+    "lines": 330
   },
   "vite.config.ts": {
-    "size": 220,
+    "size": 227,
     "type": "ts",
-    "lastModified": "2024-12-21T05:15:25.618Z",
+    "lastModified": "2024-12-28T01:11:54.402Z",
     "lines": 8
   }
 }

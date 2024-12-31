@@ -1,21 +1,20 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import type { User as FirebaseUser } from 'firebase/auth';
-import type { User } from '../vistypes';
-import { getUserData } from '../db/fetch';
+import type { SiteUser } from '../vistypes';
+import { getUserData, validateUser } from '../db/user';
 import { auth } from '~/firebase';
 
-// We'll extend our existing AuthContextType to include sign-out functionality
 interface AuthContextValue {
   foundUser: boolean;
-  user: User | null;
+  user: SiteUser | null;
   loading: boolean;
+  setUser: (user: SiteUser | null) => void;
   signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-// This custom hook will help us access the auth context easily
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
@@ -24,8 +23,7 @@ export function useAuth() {
   return context;
 }
 
-// Convert Firebase user to our app's user type
-function formatUser(firebaseUser: FirebaseUser): User {
+function formatUser(firebaseUser: FirebaseUser): SiteUser {
   return {
     uid: firebaseUser.uid,
     email: firebaseUser.email,
@@ -46,29 +44,44 @@ const getToken = async (firebaseUser: FirebaseUser) => {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [foundUser, setFoundUser] = useState<boolean>(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<SiteUser | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  // const auth = getAuth();
 
   useEffect(() => {
     // Set up Firebase auth state observer
-    const establishUser = async (firebaseUser: FirebaseUser) => {
+    const establishUser = async (firebaseUser: FirebaseUser): Promise<void> => {
+      let siteUser: SiteUser | null = null;
       const formattedUser = formatUser(firebaseUser);
       const token = await getToken(firebaseUser);
       formattedUser.accessToken = token;
-      const userData = await getUserData(formattedUser);
+      const userData = await validateUser(formattedUser);
       if (userData) {
-        setUser(userData);
+        // setUser(userData);
+
+        siteUser = {
+          accessToken: await firebaseUser.getIdToken(),
+          displayName: firebaseUser.displayName,
+          email: firebaseUser.email,
+          photoURL: firebaseUser.photoURL,
+          uid: firebaseUser.uid,
+        };
+        const userDBData = await getUserData(siteUser.uid, siteUser.accessToken || '');
+        if (userDBData) {
+          siteUser.authorizations = userDBData.authorizations;
+          siteUser.preferences = userDBData.preferences;
+        }
+        setUser(siteUser);
       }
     };
+
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
-        // User is signed in
+        // SiteUser is signed in
         setFoundUser(true);
         console.log('found signed-in user!', firebaseUser);
         establishUser(firebaseUser);
       } else {
-        // User is signed out
+        // SiteUser is signed out
         setFoundUser(false);
         setUser(null);
       }
@@ -92,7 +105,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ foundUser, user, loading, signOut }}>
+    <AuthContext.Provider value={{ foundUser, user, loading, signOut, setUser }}>
       {children}
     </AuthContext.Provider>
   );

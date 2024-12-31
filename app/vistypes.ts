@@ -1,14 +1,15 @@
-export type User = {
+export type SiteUser = {
   uid: string;
+  displayName: string | null;
   email: string | null;
   photoURL: string | null;
-  displayName: string | null;
-  authorizations?: any;
   accessToken?: string | null;
+  authorizations?: any;
+  preferences?: any;
 };
 
 export type AuthContextType = {
-  user: User | null;
+  user: SiteUser | null;
   loading: boolean;
 };
 

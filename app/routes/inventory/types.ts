@@ -1,8 +1,10 @@
+import type { SiteUser } from "~/vistypes";
+
 export interface FirebaseUserData {
   accessToken: string;
   displayName: string | null;
   email: string | null;
-  photoUrl: string | null;
+  photoURL: string | null;
   uid: string;
 }
 
@@ -16,10 +18,6 @@ export interface DatabaseMetadata {
   columns?: Column[];
   databaseName: string;
   displayName: string;
-  // typeOfItem: string;
-  // description: string;
-  // createdAt: number;
-  // updatedAt: number;
 }
 
 export interface DatabaseUserData {
@@ -32,17 +30,8 @@ interface UserInventoryData {
   databases: Record<string, DatabaseUserData>;
 }
 
-export interface UserDBData {
-  uid: string;
-  authorizations: Record<string, any>;
-  displayName: string;
-  email: string;
-  photoURL: string;
-  preferences: Record<string, any>;
-}
-
 export interface VisionaryUser {
-  visionaryData: FirebaseUserData;
+  visionaryData: SiteUser;
   inventoryData: UserInventoryData;
   preferences?: Record<string, any>;
 }
@@ -63,7 +52,8 @@ export type SortDirection = 'asc' | 'desc';
 export interface Column {
   key: string;
   label: string;
-  type: 'text' | 'number' | 'date';
+  type: 'text' | 'number' | 'date' | 'boolean';
+  isBoolean?: boolean;
   format?: (value: any) => string | Element;
 }
 
@@ -72,7 +62,7 @@ export type DataItem = Record<string, any>;
 export type SortConfig = {
   key: string;
   direction: 'asc' | 'desc';
-};
+} | null;
 
 export interface LabelOption {
   shortName?: string,

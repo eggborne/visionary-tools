@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import styles from './ToolSelectionArea.module.css';
-import { useAuth } from '../../context/AuthContext';
 import type { Tool } from '../../vistypes';
 import { Link, useNavigate } from 'react-router';
 
@@ -27,7 +26,6 @@ const tools: Tool[] = [
 ];
 
 export default function ToolSelectionArea() {
-  const { user } = useAuth();
   const [visibleTools, setVisibleTools] = useState<string[]>([]);
 
   const navigate = useNavigate();

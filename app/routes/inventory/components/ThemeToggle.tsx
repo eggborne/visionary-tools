@@ -1,3 +1,4 @@
+import { useAuth } from '~/context/AuthContext';
 import styles from './ThemeToggle.module.css';
 import { Moon, Sun } from 'lucide-react';
 
