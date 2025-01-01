@@ -16,27 +16,32 @@ const generateColumnsFromData = (data: any[]): Column[] => {
     'wired',
     'signed',
     'wrapped',
-  ]
+  ];
 
-  return Object.entries(data[0]).map(([key, value]) => ({
-    key,
-    label: key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' '),
-    type: typeof value === 'number' ? 'number' :
-      key === 'created_at' || key === 'updated_at' ? 'date' : 'text',
-    isBoolean: booleanColumns.includes(key),
-  }))
+  return Object.entries(data[0]).map(([key, value]) => {
+    const nextColumn: Column = {
+      key,
+      label: key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' '),
+      type: typeof value === 'number' ? 'number' :
+        key === 'created_at' || key === 'updated_at' ? 'date' : 'text',
+      isBoolean: booleanColumns.includes(key),
+    }
+    if (['width', 'height', 'depth'].includes(key)) {
+      nextColumn.label = nextColumn.label[0];
+    }
+    return (nextColumn)
+  })
 };
 
 const InventoryManager = () => {
-  console.log('InventoryManager render');
   const { user, setUser, loading } = useAuth();
   
   const [inventoryData, setInventoryData] = useState<InventoryItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [columns, setColumns] = useState<Column[]>([]);
   const [isDarkMode, setIsDarkMode] = useState<boolean | null>(user?.preferences?.darkMode || null);
-  const [selectedDatabase, setSelectedDatabase] = useState<DatabaseUserData | null>(user?.preferences?.lastDatabase || null);
-  
+  const [selectedDatabase, setSelectedDatabase] = useState<string | null>(user?.preferences?.lastDatabase || null);
+
   const loaded = user && !loading;
 
   const openModal = useCallback(() => setIsModalOpen(true), []);
@@ -52,12 +57,9 @@ const InventoryManager = () => {
 
   const handleSelectionChange = useCallback((databaseName: string) => {
     if (user?.authorizations?.inventory?.databases) {
-      const nextSelected = Object.values(user.authorizations.inventory.databases).find(
-        db => (db as DatabaseUserData).databaseMetadata.databaseName === databaseName
-      ) as DatabaseUserData;
-      if (user.accessToken && nextSelected) {
+      if (user.accessToken && databaseName) {
         console.log('changing db to', databaseName)
-        setSelectedDatabase(nextSelected);
+        setSelectedDatabase(databaseName);
         updateUserPreferences(user.uid, user.accessToken, 'preferences', { ...user.preferences, lastDatabase: databaseName });
       }
     }
@@ -65,15 +67,13 @@ const InventoryManager = () => {
 
   useEffect(() => {
     if (user) {
-      console.log('user at InventoryManager useEffect [user, selectedDatabase]:', user);
-      console.log('and selectedDatabase:', selectedDatabase);
+      console.log('selectedDatabase at InvMan:', selectedDatabase);
       const dbNameList = Object.keys(user.authorizations.inventory.databases);
       console.log('db name list:', dbNameList);
       if (!selectedDatabase) {
         if (user.preferences.lastDatabase !== undefined) {
-          const userDB = user?.authorizations.inventory.databases[user.preferences.lastDatabase];
-          console.log('changing to userDB:', userDB);
-          setSelectedDatabase(userDB);
+          console.log('changing to user.preferences.lastDatabase:', user.preferences.lastDatabase);
+          setSelectedDatabase(user.preferences.lastDatabase);
         } else {
           setSelectedDatabase(user?.authorizations?.inventory[0]);
         }
@@ -82,13 +82,13 @@ const InventoryManager = () => {
         toggleDarkMode(user.preferences.darkMode);
 
       }
-      if (isDarkMode === null) {
-        console.log('dark mode found null, setting to false');
-        setIsDarkMode(false);
-      }
+      // if (isDarkMode === null) {
+      //   console.log('dark mode found null, setting to false');
+      //   setIsDarkMode(false);
+      // }
       if (dbNameList.length > 0 && selectedDatabase && user.accessToken) {
-        console.log('fetching inventory data for', selectedDatabase, selectedDatabase.databaseMetadata.databaseName);
-        const nextDatabaseName = selectedDatabase.databaseMetadata.databaseName;
+        console.log('fetching inventory data for', selectedDatabase);
+        const nextDatabaseName = selectedDatabase;
         nextDatabaseName && fetchInv(nextDatabaseName || '', user.uid, user.accessToken);
       }
     }
@@ -113,8 +113,8 @@ const InventoryManager = () => {
       document.documentElement.style.setProperty('--odd-line-color', '#0000000d');
     }
     if (user) {
-      const nextUser = { ...user, preferences: { ...user.preferences, darkMode: isDarkMode } };
-      user.accessToken && updateUserPreferences(user.uid, user.accessToken, 'preferences', { ...nextUser.preferences });
+      // const nextUser = { ...user, preferences: { ...user.preferences, darkMode: isDarkMode } };
+      // user.accessToken && updateUserPreferences(user.uid, user.accessToken, 'preferences', { ...nextUser.preferences });
     }
   }, [isDarkMode, user]);
 

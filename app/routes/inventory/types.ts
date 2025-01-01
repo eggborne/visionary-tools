@@ -45,7 +45,6 @@ export interface InventoryResponse {
   data: InventoryItem[];
 }
 
-export type GroupedItem = InventoryItem & { quantity: number };
 export type SortKey = string;
 export type SortDirection = 'asc' | 'desc';
 
@@ -86,8 +85,4 @@ export interface InventoryGridProps {
 export interface SortOption {
   value: string;
   label: string;
-}
-
-export interface GroupedDataItem extends DataItem {
-  quantity?: number;
 }
