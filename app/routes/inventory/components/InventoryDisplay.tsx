@@ -2,7 +2,8 @@ import styles from './InventoryDisplay.module.css';
 import type { Column, InventoryItem } from '../types';
 import { Check, XIcon } from 'lucide-react';
 import { MaterialReactTable, type MRT_Cell } from 'material-react-table';
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Switch, FormControlLabel } from '@mui/material';
 
 
 interface InventoryDisplayProps {
@@ -35,65 +36,115 @@ const preprocessData = (data: DataItem[]): AggregatedItem[] => {
       groupedData[key].children.push(item);
     }
   });
-  return Object.values(groupedData);
+  let processedData = Object.values(groupedData);
+  console.log('processedData', processedData);
+
+  return processedData;
+};
+
+const hasDuplicates = (data: DataItem[]): boolean => {
+  const seen = new Set();
+  for (const item of data) {
+    const key = Object.entries(item)
+      .filter(([k]) => k !== 'id')
+      .map(([k, v]) => `${k}:${v}`)
+      .join('|');
+    if (seen.has(key)) {
+      return true;
+    }
+    seen.add(key);
+  }
+  return false;
 };
 
 const InventoryDisplay = ({ data, columns }: InventoryDisplayProps) => {
   const [groupIdentical, setGroupIdentical] = useState<boolean>(true);
-  console.log('InventoryDisplay columns', columns);
+  const [hasDuplicateEntries, setHasDuplicateEntries] = useState<boolean>(false);
+
+  useEffect(() => {
+    const duplicatesExist = hasDuplicates(data);
+    setHasDuplicateEntries(duplicatesExist);
+
+  }, [data, groupIdentical]);
 
   const displayData = useMemo(() => {
     if (groupIdentical) {
       return preprocessData(data);
     }
     return data.map((item) => ({ ...item, quantity: 1, children: [] }));
-  }, [data, groupIdentical]);
-  console.log('Display Data:', displayData);
+  }, [data, groupIdentical, hasDuplicateEntries]);
 
+  const priorityOrder = ['quantity', 'id', 'width', 'height', 'depth', 'location', 'title', 'series', 'type', 'origin', 'packaging', 'price', 'buyer', 'wired', 'signed', 'wrapped', 'notes'];
 
   const dimensions = ['width', 'height', 'depth'];
+  const omittedColumns = ['urgent', 'finished', 'images'];
 
-  const mappedColumns = [
-    ...(groupIdentical
-      ? [
-        {
-          accessorKey: 'quantity',
-          header: 'Qty',
-          size: 1,
-          muiTableBodyCellProps: {
+  const mappedColumns = 
+  useMemo(() => {
+    const filteredColumns = [...columns]
+      .filter((c) =>
+        (groupIdentical && hasDuplicateEntries)
+          ? !omittedColumns.includes(c.key) && c.key !== 'id'
+          : !omittedColumns.includes(c.key)
+    );
+    
+    let finalColumns = [
+      ...((groupIdentical && hasDuplicateEntries)
+        ? [
+          {
+            accessorKey: 'quantity',
+            header: 'Qty',
+            size: 1,
+            muiTableBodyCellProps: {
+              sx: {
+                textAlign: 'center',
+              },
+            },
+            Cell: ({ cell }: { cell: MRT_Cell<AggregatedItem> }) =>
+              cell.getValue<number>() ?? 1,
+          },
+        ]
+        : []),
+      ...filteredColumns.map((col) => ({
+        accessorKey: col.key,
+        header: col.label,
+        size: 1,
+        minSize: 1,
+        maxSize: 10,
+        muiTableBodyCellProps: (col.isBoolean || dimensions.includes(col.key))
+          ? {
             sx: {
               textAlign: 'center',
             },
-          },
-          Cell: ({ cell }: { cell: MRT_Cell<AggregatedItem> }) => (cell.getValue<number>()) ?? 1,
-        },
-      ]
-      : []),
-    ...columns.filter(c => groupIdentical ? (c.key !== 'id' && c.key !== 'urgent' && c.key !== 'finished') : (c.key !== 'urgent' && c.key !== 'finished')).map((col) => ({
-      accessorKey: col.key,
-      header: col.label,
-      size: 1,
-      minSize: 1,
-      maxSize: 10,
-      muiTableBodyCellProps: (col.isBoolean || dimensions.includes(col.key))
-        ? ({ cell }: { cell: MRT_Cell<AggregatedItem> }) => ({
-          sx: {
-            textAlign: 'center',
-          },
-        })
-        : undefined,
-      Cell: col.isBoolean
-        ? ({ cell }: { cell: MRT_Cell<AggregatedItem> }) => (
-          cell.getValue<number>() === 1 ? (
-            <Check style={{ color: 'green' }} />
-          ) : (
-            <XIcon style={{ color: 'red' }} />
-          )
-        )
-        : col.key === 'id' && groupIdentical
-          ? ({ cell }: { cell: MRT_Cell<AggregatedItem> }) => (cell.getValue<string>() === '~' ? '~' : cell.getValue<string>())
-          : undefined, // Default rendering for other types
-    }))];
+          }
+          : undefined,
+        Cell: col.isBoolean
+          ? ({ cell }: { cell: MRT_Cell<AggregatedItem> }) =>
+            cell.getValue<number>() === 1 ? (
+              <Check style={{ color: 'green' }} />
+            ) : (
+              <XIcon style={{ color: 'red' }} />
+            )
+          : dimensions.includes(col.key)
+            ? ({ cell }: { cell: MRT_Cell<AggregatedItem> }) =>
+              cell.getValue<number>() !== null ?
+                <span>{cell.getValue<number>() + `"`}</span>
+            : undefined    
+          : undefined,
+      })),
+    ];
+    console.log('unsorted columns', finalColumns);
+    finalColumns = finalColumns.sort((a, b) => {
+      if (a.accessorKey === 'quantity') return -1;
+      if (b.accessorKey === 'quantity') return 1;
+      return (
+        priorityOrder.indexOf(a.accessorKey) - priorityOrder.indexOf(b.accessorKey)
+      );
+    });
+    return finalColumns;
+  }, [columns, groupIdentical, hasDuplicateEntries]);
+
+  console.log('mapped columns', mappedColumns);
 
   return (
     <div className={styles.InventoryDisplay}>
@@ -103,26 +154,37 @@ const InventoryDisplay = ({ data, columns }: InventoryDisplayProps) => {
         enableGlobalFilter
         positionGlobalFilter={'left'}
         enableDensityToggle={false}
-        enableHiding={false}
+        // enableHiding={false}
         enableFullScreenToggle={false} // Disable full screen toggle button
         enableBottomToolbar={false}
         initialState={{
-          showGlobalFilter: true,
+          columnVisibility: {
+            series: false,
+            signed: false,
+            wrapped: false,
+            wired: false,
+          },
           density: 'compact',
-          pagination: { pageIndex: 0, pageSize: 200 },
+          showGlobalFilter: true,
+          // pagination: { pageIndex: 0, pageSize: 100 },
         }}
+        enablePagination={false}
         enableColumnActions={false} // Disable column action buttons
-        enableColumnFilters={false} // Disable column filters
-        enableRowActions={false} // Disable row action buttons
-        muiTableProps={{
-          sx: {
-            // padding: '1rem',
-          }
-        }}
+        // enableColumnFilters={false} // Disable column filters
+        enableRowActions={false} // Disable row action buttons        
         muiTablePaperProps={{
           sx: {
-            padding: '1rem',
             backgroundColor: 'var(--background-color)',
+            '& tbody': {
+              backgroundColor: 'var(--accent-color) !important',
+            },
+            '& tr': {
+              backgroundColor: 'transparent !important',
+              '&:nth-of-type(odd)': {
+                backgroundColor: 'var(--odd-line-color) !important',
+              },
+              color: 'var(--text-color)',
+            }
           }
         }}
         muiTopToolbarProps={{
@@ -143,21 +205,37 @@ const InventoryDisplay = ({ data, columns }: InventoryDisplayProps) => {
             }
           }
         }}
-        renderTopToolbarCustomActions={() => (
-          <button
-            onClick={() => setGroupIdentical((prev) => !prev)}
-            style={{
-              padding: '8px 16px',
-              backgroundColor: '#007bff',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
-          >
-            {groupIdentical ? 'Ungroup Identical' : 'Group Identical'}
-          </button>
-        )}
+        renderTopToolbarCustomActions={() =>
+          hasDuplicateEntries && (
+            // <button
+            //   onClick={() => setGroupIdentical((prev) => !prev)}
+            //   style={{
+            //     padding: '8px 16px',
+            //     backgroundColor: '#007bff',
+            //     color: '#fff',
+            //     border: 'none',
+            //     borderRadius: '4px',
+            //     cursor: 'pointer',
+            //   }}
+            // >
+            //   {groupIdentical ? 'Ungroup Identical' : 'Group Identical'}
+            // </button>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={groupIdentical}
+                  onChange={(e) => setGroupIdentical(e.target.checked)}
+                  color="primary"
+                  
+                />
+              }
+              label="Group Identical"
+              sx={{
+                color: 'var(--text-color) !important',
+              }}
+            />
+          )
+        }
       />
 
     </div>

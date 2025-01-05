@@ -56,11 +56,6 @@ export default function App() {
     transitionDelay: `${titleChars.length * 30}ms`
   };
 
-  if (user) {
-    console.log('user is ---------->', user)
-  }
-
-  // Show loading state while authentication state is being determined
   if (loading) {
     return (
       <div className={styles.container}>

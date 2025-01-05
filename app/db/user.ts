@@ -16,7 +16,6 @@ const validateUser = async (user: SiteUser): Promise<SiteUser | undefined> => {
     }
 
     const result = await response.json();
-    console.log('result.user', result.user)
     return result.user;
   } catch (error) {
     console.error('Error getting user data:', error);
@@ -41,7 +40,6 @@ async function getUserData(uid: string, accessToken: string): Promise<SiteUser |
     }
 
     const userData = await response.json();
-    console.log('getUser userData:', userData);
     userData.authorizations = JSON.parse(userData.authorizations);
     userData.preferences = JSON.parse(userData.preferences);
     return userData;

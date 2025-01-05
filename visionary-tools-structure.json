@@ -58,10 +58,10 @@
     },
     "db": {
       "user.ts": {
-        "size": 1739,
+        "size": 1645,
         "type": "ts",
-        "lastModified": "2024-12-31T17:38:15.764Z",
-        "lines": 56
+        "lastModified": "2025-01-01T02:06:03.158Z",
+        "lines": 54
       }
     },
     "firebase.ts": {
@@ -152,14 +152,14 @@
       "home.module.css": {
         "size": 5073,
         "type": "css",
-        "lastModified": "2024-12-31T17:42:13.947Z",
+        "lastModified": "2025-01-01T01:53:27.863Z",
         "lines": 276
       },
       "home.tsx": {
-        "size": 3700,
+        "size": 3560,
         "type": "tsx",
-        "lastModified": "2024-12-31T06:25:27.036Z",
-        "lines": 127
+        "lastModified": "2025-01-01T02:06:14.809Z",
+        "lines": 122
       },
       "inventory": {
         "components": {
@@ -182,22 +182,22 @@
             "lines": 123
           },
           "DatabaseSelection.tsx": {
-            "size": 1017,
+            "size": 976,
             "type": "tsx",
-            "lastModified": "2024-12-28T01:11:54.388Z",
+            "lastModified": "2025-01-01T01:28:07.238Z",
             "lines": 32
           },
           "InventoryDisplay.module.css": {
-            "size": 167,
+            "size": 227,
             "type": "css",
-            "lastModified": "2024-12-31T22:54:39.091Z",
-            "lines": 9
+            "lastModified": "2025-01-01T02:03:39.440Z",
+            "lines": 15
           },
           "InventoryDisplay.tsx": {
-            "size": 2033,
+            "size": 6016,
             "type": "tsx",
-            "lastModified": "2024-12-31T22:53:12.330Z",
-            "lines": 72
+            "lastModified": "2025-01-01T03:03:19.042Z",
+            "lines": 190
           },
           "ThemeToggle.module.css": {
             "size": 1031,
@@ -225,22 +225,22 @@
           "lines": 84
         },
         "InventoryManager.module.css": {
-          "size": 1585,
+          "size": 1531,
           "type": "css",
-          "lastModified": "2024-12-31T22:51:52.379Z",
-          "lines": 84
+          "lastModified": "2025-01-01T01:52:30.356Z",
+          "lines": 80
         },
         "InventoryManager.tsx": {
-          "size": 7316,
+          "size": 6608,
           "type": "tsx",
-          "lastModified": "2024-12-31T22:03:48.117Z",
-          "lines": 180
+          "lastModified": "2025-01-01T02:44:46.086Z",
+          "lines": 170
         },
         "types.ts": {
-          "size": 1942,
+          "size": 1797,
           "type": "ts",
-          "lastModified": "2024-12-31T19:35:48.058Z",
-          "lines": 93
+          "lastModified": "2025-01-01T00:26:23.349Z",
+          "lines": 88
         }
       }
     },
@@ -314,12 +314,6 @@
     "type": "json",
     "lastModified": "2024-12-28T01:11:54.399Z",
     "lines": 28
-  },
-  "visionary-tools-structure.json": {
-    "size": 8335,
-    "type": "json",
-    "lastModified": "2024-12-31T19:01:17.616Z",
-    "lines": 330
   },
   "vite.config.ts": {
     "size": 227,

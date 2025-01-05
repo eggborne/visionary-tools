@@ -50,7 +50,6 @@ const InventoryManager = () => {
   const fetchInv = async (dbName: string, uid: string, accessToken: string) => {
     const startTime = Date.now();
     const items = await getInventory(dbName, uid, accessToken);
-    console.log(items[0])
     setInventoryData(items);
     console.warn(items.length, 'items fetched in', (Date.now() - startTime), 'ms');
   }
@@ -58,7 +57,6 @@ const InventoryManager = () => {
   const handleSelectionChange = useCallback((databaseName: string) => {
     if (user?.authorizations?.inventory?.databases) {
       if (user.accessToken && databaseName) {
-        console.log('changing db to', databaseName)
         setSelectedDatabase(databaseName);
         updateUserPreferences(user.uid, user.accessToken, 'preferences', { ...user.preferences, lastDatabase: databaseName });
       }
@@ -67,12 +65,9 @@ const InventoryManager = () => {
 
   useEffect(() => {
     if (user) {
-      console.log('selectedDatabase at InvMan:', selectedDatabase);
       const dbNameList = Object.keys(user.authorizations.inventory.databases);
-      console.log('db name list:', dbNameList);
       if (!selectedDatabase) {
         if (user.preferences.lastDatabase !== undefined) {
-          console.log('changing to user.preferences.lastDatabase:', user.preferences.lastDatabase);
           setSelectedDatabase(user.preferences.lastDatabase);
         } else {
           setSelectedDatabase(user?.authorizations?.inventory[0]);
@@ -80,12 +75,7 @@ const InventoryManager = () => {
       }
       if (user.preferences.darkMode !== isDarkMode) {
         toggleDarkMode(user.preferences.darkMode);
-
       }
-      // if (isDarkMode === null) {
-      //   console.log('dark mode found null, setting to false');
-      //   setIsDarkMode(false);
-      // }
       if (dbNameList.length > 0 && selectedDatabase && user.accessToken) {
         console.log('fetching inventory data for', selectedDatabase);
         const nextDatabaseName = selectedDatabase;
@@ -104,7 +94,7 @@ const InventoryManager = () => {
     if (isDarkMode) {
       document.documentElement.style.setProperty('--background-color', '#242424');
       document.documentElement.style.setProperty('--text-color', '#ffffffde');
-      document.documentElement.style.setProperty('--accent-color', '#444');
+      document.documentElement.style.setProperty('--accent-color', '#333');
       document.documentElement.style.setProperty('--odd-line-color', '#ffffff0d');
     } else {
       document.documentElement.style.setProperty('--background-color', '#dedede');
@@ -113,8 +103,8 @@ const InventoryManager = () => {
       document.documentElement.style.setProperty('--odd-line-color', '#0000000d');
     }
     if (user) {
-      // const nextUser = { ...user, preferences: { ...user.preferences, darkMode: isDarkMode } };
-      // user.accessToken && updateUserPreferences(user.uid, user.accessToken, 'preferences', { ...nextUser.preferences });
+      const nextUser = { ...user, preferences: { ...user.preferences, darkMode: isDarkMode } };
+      user.accessToken && updateUserPreferences(user.uid, user.accessToken, 'preferences', { ...nextUser.preferences });
     }
   }, [isDarkMode, user]);
 
@@ -131,7 +121,6 @@ const InventoryManager = () => {
   return (
     <div className={style.InventoryManager}>
       <div className={style.header}>
-        {isDarkMode !== null && <>
           {user ?
             <>
               <div className={style.userInfo}>
@@ -151,8 +140,7 @@ const InventoryManager = () => {
               </div>
             </>
           }
-          <ThemeToggle isDarkMode={isDarkMode} onToggle={() => toggleDarkMode(!isDarkMode)} />
-        </>}
+          <ThemeToggle isDarkMode={isDarkMode || false} onToggle={() => toggleDarkMode(!isDarkMode)} />
       </div>
       <div className={style.main} style={{ opacity: loaded ? 1 : 0 }}>
         {(user && selectedDatabase && memoizedData.length > 0 && memoizedColumns.length > 0) ?
